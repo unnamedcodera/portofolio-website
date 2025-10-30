@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { setLogoutCallback } from './services/api'
 import LoadingScreen from './components/LoadingScreen.tsx'
-import MainContent from './components/MainContent.tsx'
-import ProjectDetail from './components/ProjectDetail.tsx'
-import ProjectsList from './components/ProjectsList.tsx'
-import LoginPage from './components/admin/LoginPage.tsx'
-import AdminDashboard from './components/admin/AdminDashboard.tsx'
-import ProjectEditor from './components/admin/ProjectEditor.tsx'
+
+// Lazy load components for code splitting
+const MainContent = lazy(() => import('./components/MainContent.tsx'))
+const ProjectDetail = lazy(() => import('./components/ProjectDetail.tsx'))
+const ProjectsList = lazy(() => import('./components/ProjectsList.tsx'))
+const LoginPage = lazy(() => import('./components/admin/LoginPage.tsx'))
+const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard.tsx'))
+const ProjectEditor = lazy(() => import('./components/admin/ProjectEditor.tsx'))
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -16,6 +19,11 @@ function App() {
     // Check authentication
     const token = localStorage.getItem('admin_token')
     setIsAuthenticated(!!token)
+
+    // Set logout callback for API interceptor
+    setLogoutCallback(() => {
+      setIsAuthenticated(false)
+    })
 
     // Simulate loading time
     const timer = setTimeout(() => {
@@ -31,6 +39,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token')
+    localStorage.removeItem('adminActiveTab')
     setIsAuthenticated(false)
   }
 
@@ -40,49 +49,51 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<MainContent />} />
-        <Route path="/projects" element={<ProjectsList />} />
-        <Route path="/project/:slug" element={<ProjectDetail />} />
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<MainContent />} />
+          <Route path="/projects" element={<ProjectsList />} />
+          <Route path="/project/:slug" element={<ProjectDetail />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            isAuthenticated ? (
-              <AdminDashboard onLogout={handleLogout} />
-            ) : (
-              <LoginPage onLoginSuccess={handleLoginSuccess} />
-            )
-          }
-        />
-        
-        {/* Project Editor Routes */}
-        <Route
-          path="/admin/project/new"
-          element={
-            isAuthenticated ? (
-              <ProjectEditor />
-            ) : (
-              <Navigate to="/admin" replace />
-            )
-          }
-        />
-        <Route
-          path="/admin/project/edit/:id"
-          element={
-            isAuthenticated ? (
-              <ProjectEditor />
-            ) : (
-              <Navigate to="/admin" replace />
-            )
-          }
-        />
+          {/* Admin Routes */}
+          <Route
+            path="/admin"
+            element={
+              isAuthenticated ? (
+                <AdminDashboard onLogout={handleLogout} />
+              ) : (
+                <LoginPage onLoginSuccess={handleLoginSuccess} />
+              )
+            }
+          />
+          
+          {/* Project Editor Routes */}
+          <Route
+            path="/admin/project/new"
+            element={
+              isAuthenticated ? (
+                <ProjectEditor />
+              ) : (
+                <Navigate to="/admin" replace />
+              )
+            }
+          />
+          <Route
+            path="/admin/project/edit/:id"
+            element={
+              isAuthenticated ? (
+                <ProjectEditor />
+              ) : (
+                <Navigate to="/admin" replace />
+              )
+            }
+          />
 
-        {/* Catch all - redirect to home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Catch all - redirect to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

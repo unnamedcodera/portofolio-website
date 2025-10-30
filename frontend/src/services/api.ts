@@ -3,7 +3,32 @@ const API_BASE_URL = 'http://localhost:5001/api';
 // Get token from localStorage
 const getToken = () => localStorage.getItem('admin_token');
 
-// API helper function
+// CSRF token cache
+let csrfToken: string | null = null;
+
+// Logout callback - set this from the app
+let logoutCallback: (() => void) | null = null;
+
+export const setLogoutCallback = (callback: () => void) => {
+  logoutCallback = callback;
+};
+
+// Get CSRF token
+const getCsrfToken = async (): Promise<string> => {
+  if (csrfToken) return csrfToken;
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/csrf-token`);
+    const data = await response.json();
+    csrfToken = data.csrfToken;
+    return csrfToken!;
+  } catch (error) {
+    console.error('Failed to fetch CSRF token:', error);
+    throw new Error('Security token unavailable');
+  }
+};
+
+// API helper function with token expiration and CSRF handling
 const apiCall = async (endpoint: string, options: RequestInit = {}) => {
   const token = getToken();
   
@@ -15,13 +40,41 @@ const apiCall = async (endpoint: string, options: RequestInit = {}) => {
     defaultHeaders['Authorization'] = `Bearer ${token}`;
   }
 
+  // Add CSRF token for non-GET requests
+  if (options.method && options.method !== 'GET') {
+    const csrf = await getCsrfToken();
+    defaultHeaders['X-CSRF-Token'] = csrf;
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
+    credentials: 'include',
     headers: {
       ...defaultHeaders,
       ...options.headers,
     },
   });
+
+  // Handle 401 Unauthorized (token expired or invalid)
+  if (response.status === 401) {
+    localStorage.removeItem('admin_token');
+    localStorage.removeItem('adminActiveTab');
+    if (logoutCallback) {
+      logoutCallback();
+    }
+    throw new Error('Session expired. Please login again.');
+  }
+
+  // Handle 403 Forbidden (CSRF token invalid)
+  if (response.status === 403) {
+    csrfToken = null; // Reset CSRF token
+    const error = await response.json().catch(() => ({ error: 'Request forbidden' }));
+    if (error.error?.includes('CSRF')) {
+      // Retry once with new CSRF token
+      return apiCall(endpoint, options);
+    }
+    throw new Error(error.error || 'Request forbidden');
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Request failed' }));

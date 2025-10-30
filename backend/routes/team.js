@@ -7,6 +7,7 @@ import {
   deleteTeamMember
 } from '../database.js';
 import authMiddleware from '../middleware/auth.js';
+import { teamValidation, validateRequest } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -35,7 +36,7 @@ router.get('/:id', (req, res) => {
 });
 
 // Protected routes (require authentication)
-router.post('/', authMiddleware, (req, res) => {
+router.post('/', authMiddleware, teamValidation, validateRequest, (req, res) => {
   try {
     const result = createTeamMember(req.body);
     res.status(201).json({ success: true, id: result.lastInsertRowid });
@@ -45,7 +46,7 @@ router.post('/', authMiddleware, (req, res) => {
   }
 });
 
-router.put('/:id', authMiddleware, (req, res) => {
+router.put('/:id', authMiddleware, teamValidation, validateRequest, (req, res) => {
   try {
     const result = updateTeamMember(req.params.id, req.body);
     if (result.changes === 0) {

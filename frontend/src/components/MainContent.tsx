@@ -51,12 +51,14 @@ const MainContent = () => {
       </div>
 
       {/* CTA Section */}
-      <div id="contact">
+      <div id="contact" className="mb-20">
         <CTASection />
       </div>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer with spacing */}
+      <div className="mt-32">
+        <Footer />
+      </div>
     </div>
   )
 }

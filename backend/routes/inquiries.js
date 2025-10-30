@@ -1,6 +1,7 @@
 import express from 'express';
 import * as db from '../database.js';
 import { authenticateToken } from '../middleware/auth.js';
+import { inquiryValidation, validateRequest } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -52,8 +53,8 @@ router.get('/:id', authenticateToken, (req, res) => {
   }
 });
 
-// POST new inquiry (public - no auth required)
-router.post('/', (req, res) => {
+// POST new inquiry (public - no auth required, but validated)
+router.post('/', inquiryValidation, validateRequest, (req, res) => {
   try {
     const {
       companyName,

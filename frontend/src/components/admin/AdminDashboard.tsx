@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import { teamAPI, projectsAPI, slidesAPI, categoriesAPI } from '../../services/api'
@@ -19,7 +19,11 @@ type FormMode = 'create' | 'edit' | null
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const navigate = useNavigate()
-  const [activeTab, setActiveTab] = useState<'team' | 'projects' | 'slides' | 'categories' | 'inquiries' | 'settings'>('team')
+  // Load last active tab from localStorage or default to 'team'
+  const [activeTab, setActiveTab] = useState<'team' | 'projects' | 'slides' | 'categories' | 'inquiries' | 'settings'>(() => {
+    const savedTab = localStorage.getItem('adminActiveTab')
+    return (savedTab as any) || 'team'
+  })
   const [teamData, setTeamData] = useState<any[]>([])
   const [projectsData, setProjectsData] = useState<any[]>([])
   const [slidesData, setSlidesData] = useState<any[]>([])
@@ -31,11 +35,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [formData, setFormData] = useState<any>({})
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  const fetchData = async () => {
+  // Memoized fetch function
+  const fetchData = useCallback(async () => {
     setLoading(true)
     try {
       const [team, projects, slides, categories] = await Promise.all([
@@ -59,7 +60,16 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  // Save active tab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('adminActiveTab', activeTab)
+  }, [activeTab])
 
   const handleDelete = async (type: 'team' | 'projects' | 'slides' | 'categories', id: number) => {
     const result = await Swal.fire({
@@ -354,7 +364,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         </div>
 
         {/* Add New Button - Fixed on mobile */}
-        {activeTab !== 'inquiries' && (
+        {activeTab !== 'inquiries' && activeTab !== 'settings' && (
           <div className="mb-6 sm:mb-8">
             <motion.button
               onClick={() => {

@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
@@ -11,17 +14,52 @@ import uploadRoutes from './routes/upload.js';
 import categoryRoutes from './routes/categories.js';
 import inquiryRoutes from './routes/inquiries.js';
 import settingsRoutes from './routes/settings.js';
+import { getCsrfToken, verifyCsrfToken } from './middleware/csrf.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Middleware
+// Security Headers
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:", "blob:", "https:"],
+      connectSrc: ["'self'"],
+      fontSrc: ["'self'", "data:"],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5, // Limit login attempts
+  message: 'Too many login attempts, please try again later.',
+});
+
+app.use('/api/', limiter);
+app.use('/api/auth/login', authLimiter);
+
+// CORS
 app.use(cors({
   origin: config.corsOrigin,
   credentials: true
 }));
+app.use(cookieParser());
 // Increase body size limit to handle base64 images and large canvas content (50MB)
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -29,15 +67,18 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Routes
+// CSRF token endpoint (public)
+app.get('/api/csrf-token', getCsrfToken);
+
+// Routes (apply CSRF protection to protected routes)
 app.use('/api/auth', authRoutes);
-app.use('/api/team', teamRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/slides', slideRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/inquiries', inquiryRoutes);
-app.use('/api/settings', settingsRoutes);
+app.use('/api/team', verifyCsrfToken, teamRoutes);
+app.use('/api/projects', verifyCsrfToken, projectRoutes);
+app.use('/api/slides', verifyCsrfToken, slideRoutes);
+app.use('/api/upload', verifyCsrfToken, uploadRoutes);
+app.use('/api/categories', verifyCsrfToken, categoryRoutes);
+app.use('/api/inquiries', inquiryRoutes); // Public POST, protected PUT/DELETE
+app.use('/api/settings', settingsRoutes); // Public GET, protected PUT
 
 // Health check
 app.get('/api/health', (req, res) => {

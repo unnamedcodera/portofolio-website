@@ -1,23 +1,24 @@
 import { motion } from 'framer-motion'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { memo, useMemo, useCallback } from 'react'
 
 interface NavigationProps {
   activeSection: string
   setActiveSection: (section: string) => void
 }
 
-const Navigation: React.FC<NavigationProps> = ({ activeSection, setActiveSection }) => {
+const Navigation: React.FC<NavigationProps> = memo(({ activeSection, setActiveSection }) => {
   const navigate = useNavigate()
   const location = useLocation()
   
-  const navItems = [
+  const navItems = useMemo(() => [
     { id: 'home', label: 'Home' },
     { id: 'projects', label: 'Projects' },
     { id: 'team', label: 'Team' },
     { id: 'contact', label: 'Contact' }
-  ]
+  ], [])
 
-  const handleNavClick = (sectionId: string) => {
+  const handleNavClick = useCallback((sectionId: string) => {
     setActiveSection(sectionId)
     
     // If we're not on the home page and clicking home, navigate to home
@@ -56,7 +57,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection, setActiveSection
       const offsetPosition = elementPosition + window.pageYOffset - offset
       window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
     }
-  }
+  }, [location.pathname, navigate, setActiveSection])
 
   return (
     <motion.nav
@@ -123,6 +124,8 @@ const Navigation: React.FC<NavigationProps> = ({ activeSection, setActiveSection
       </div>
     </motion.nav>
   )
-}
+})
+
+Navigation.displayName = 'Navigation'
 
 export default Navigation

@@ -202,27 +202,74 @@ const CTASection: React.FC = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            {/* Decorative circles */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-dun/20 to-transparent rounded-full -mr-32 -mt-32 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-walnut/20 to-transparent rounded-full -ml-24 -mb-24 blur-3xl"></div>
             
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">
-              Ready to Get Started?
-            </h2>
-            <p className="text-xl mb-8 opacity-90 relative z-10">
-              Let's bring your vision to life. Tell us about your project!
-            </p>
-            <motion.button
-              onClick={() => setShowModal(true)}
-              className="px-8 py-4 bg-white text-vandyke rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all relative z-10 inline-flex items-center gap-2"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <span>Start Your Project</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </motion.button>
+            {/* Floating particles */}
+            <motion.div
+              className="absolute top-10 left-10 w-2 h-2 bg-magnolia rounded-full"
+              animate={{ y: [0, -20, 0], opacity: [0.3, 0.8, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            />
+            <motion.div
+              className="absolute top-20 right-20 w-3 h-3 bg-dun rounded-full"
+              animate={{ y: [0, 20, 0], opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 4, repeat: Infinity, delay: 0.5 }}
+            />
+            <motion.div
+              className="absolute bottom-16 left-1/4 w-2 h-2 bg-magnolia/60 rounded-full"
+              animate={{ y: [0, -15, 0], opacity: [0.3, 0.9, 0.3] }}
+              transition={{ duration: 3.5, repeat: Infinity, delay: 1 }}
+            />
+            
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <div className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-semibold mb-6">
+                  ✨ Let's Create Something Amazing
+                </div>
+              </motion.div>
+              
+              <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                Ready to Get Started?
+              </h2>
+              <p className="text-xl md:text-2xl mb-10 opacity-90 leading-relaxed">
+                Let's bring your vision to life. Tell us about your project and we'll make it happen!
+              </p>
+              
+              <motion.button
+                onClick={() => setShowModal(true)}
+                className="group relative px-10 py-5 bg-white text-vandyke rounded-full font-bold text-lg shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] transition-all inline-flex items-center gap-3 overflow-hidden"
+                whileHover={{ scale: 1.05, y: -3 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-dun to-magnolia opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <span className="relative z-10">Start Your Project</span>
+                <motion.svg 
+                  className="w-6 h-6 relative z-10" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </motion.svg>
+              </motion.button>
+              
+              <motion.p 
+                className="mt-6 text-sm opacity-70"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.7 }}
+                transition={{ delay: 0.5 }}
+              >
+                🎯 Free consultation • Fast response • Professional team
+              </motion.p>
+            </div>
           </motion.div>
         </div>
       </section>
