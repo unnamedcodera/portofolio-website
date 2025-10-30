@@ -183,25 +183,20 @@ const ArtisticFrameSlider: React.FC = () => {
         
         {/* Abstract squiggles */}
         <svg className="absolute top-1/2 left-10 w-32 h-32 opacity-12" viewBox="0 0 100 100">
-          <motion.path
+          <path
             d="M10,50 Q25,25 40,50 T70,50 T100,50"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.5"
             className="text-battleshipgray"
-            animate={{
-              d: [
-                "M10,50 Q25,25 40,50 T70,50 T100,50",
-                "M10,50 Q25,75 40,50 T70,50 T100,50",
-                "M10,50 Q25,25 40,50 T70,50 T100,50"
-              ]
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
+          >
+            <animate
+              attributeName="d"
+              values="M10,50 Q25,25 40,50 T70,50 T100,50;M10,50 Q25,75 40,50 T70,50 T100,50;M10,50 Q25,25 40,50 T70,50 T100,50"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </path>
         </svg>
         
         <svg className="absolute bottom-20 right-10 w-40 h-40 opacity-10" viewBox="0 0 100 100">

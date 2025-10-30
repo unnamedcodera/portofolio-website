@@ -57,22 +57,40 @@ const Footer: React.FC = memo(() => {
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path 
-            d="M0,50 Q300,20 600,50 T1200,50 L1200,100 L0,100 Z" 
-            fill="url(#footerGradient)" 
-            opacity="0.9"
-          />
-          <path 
-            d="M0,60 Q300,35 600,60 T1200,60 L1200,100 L0,100 Z" 
-            fill="#664228" 
-          />
           <defs>
+            <linearGradient id="footerGradientTop" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="#F5F5F5" stopOpacity="1" />
+              <stop offset="20%" stopColor="#F5F5F5" stopOpacity="1" />
+              <stop offset="40%" stopColor="#D4B59E" stopOpacity="0.95" />
+              <stop offset="60%" stopColor="#6B4423" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#664228" stopOpacity="1" />
+            </linearGradient>
             <linearGradient id="footerGradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#664228" />
               <stop offset="50%" stopColor="#6B4423" />
               <stop offset="100%" stopColor="#664228" />
             </linearGradient>
           </defs>
+          
+          {/* First wave layer - blend with CTA background */}
+          <path 
+            d="M0,40 Q300,15 600,40 T1200,40 L1200,100 L0,100 Z" 
+            fill="url(#footerGradientTop)" 
+            opacity="0.95"
+          />
+          
+          {/* Second wave layer */}
+          <path 
+            d="M0,50 Q300,20 600,50 T1200,50 L1200,100 L0,100 Z" 
+            fill="url(#footerGradient)" 
+            opacity="0.9"
+          />
+          
+          {/* Third wave layer - solid footer color */}
+          <path 
+            d="M0,60 Q300,35 600,60 T1200,60 L1200,100 L0,100 Z" 
+            fill="#664228" 
+          />
         </svg>
         
         {/* Floating particles */}
@@ -126,7 +144,7 @@ const Footer: React.FC = memo(() => {
         ))}
       </div>
 
-      <div className="py-12 px-6">
+      <div className="pt-24 pb-12 px-6">
         <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}

@@ -29,22 +29,39 @@ export const teamValidation = [
     .notEmpty().withMessage('Name is required')
     .isLength({ max: 100 }).withMessage('Name too long')
     .customSanitizer(sanitizeString),
-  body('role')
+  body('position')
     .trim()
-    .notEmpty().withMessage('Role is required')
-    .isLength({ max: 100 }).withMessage('Role too long')
+    .notEmpty().withMessage('Position is required')
+    .isLength({ max: 100 }).withMessage('Position too long')
     .customSanitizer(sanitizeString),
   body('bio')
     .optional()
     .trim()
     .isLength({ max: 1000 }).withMessage('Bio too long')
     .customSanitizer(sanitizeString),
-  body('image')
+  body('icon')
     .optional()
     .trim(),
+  body('skills')
+    .optional()
+    .trim(),
+  body('email')
+    .optional()
+    .trim()
+    .isEmail().withMessage('Invalid email format')
+    .normalizeEmail(),
+  body('phone')
+    .optional()
+    .trim(),
+  body('image_url')
+    .optional()
+    .trim(),
+  body('display_order')
+    .optional()
+    .isInt({ min: 0 }).withMessage('Invalid display order'),
   body('social_media')
     .optional()
-    .isJSON().withMessage('Social media must be valid JSON'),
+    .trim(),
 ];
 
 // Project validation rules
@@ -54,18 +71,38 @@ export const projectValidation = [
     .notEmpty().withMessage('Title is required')
     .isLength({ max: 200 }).withMessage('Title too long')
     .customSanitizer(sanitizeString),
+  body('slug')
+    .optional()
+    .trim()
+    .matches(/^[a-z0-9-]*$/).withMessage('Invalid slug format'),
   body('description')
     .optional()
     .trim()
     .isLength({ max: 2000 }).withMessage('Description too long')
     .customSanitizer(sanitizeString),
-  body('category_id')
+  body('content')
     .optional()
-    .isInt({ min: 1 }).withMessage('Invalid category ID'),
-  body('slug')
+    .trim(),
+  body('category')
     .optional()
     .trim()
-    .matches(/^[a-z0-9-]+$/).withMessage('Invalid slug format'),
+    .customSanitizer(sanitizeString),
+  body('author')
+    .optional()
+    .trim()
+    .customSanitizer(sanitizeString),
+  body('banner_image')
+    .optional()
+    .trim(),
+  body('image_url')
+    .optional()
+    .trim(),
+  body('display_order')
+    .optional()
+    .isInt({ min: 0 }).withMessage('Invalid display order'),
+  body('is_featured')
+    .optional()
+    .isBoolean().withMessage('is_featured must be boolean'),
 ];
 
 // Inquiry validation rules
@@ -132,9 +169,28 @@ export const slideValidation = [
     .trim()
     .isLength({ max: 200 }).withMessage('Subtitle too long')
     .customSanitizer(sanitizeString),
-  body('order_index')
+  body('description')
     .optional()
-    .isInt({ min: 0 }).withMessage('Invalid order index'),
+    .trim()
+    .isLength({ max: 1000 }).withMessage('Description too long')
+    .customSanitizer(sanitizeString),
+  body('image_url')
+    .optional()
+    .trim(),
+  body('button_text')
+    .optional()
+    .trim()
+    .isLength({ max: 100 }).withMessage('Button text too long')
+    .customSanitizer(sanitizeString),
+  body('button_link')
+    .optional()
+    .trim(),
+  body('display_order')
+    .optional()
+    .isInt({ min: 0 }).withMessage('Invalid display order'),
+  body('is_active')
+    .optional()
+    .isBoolean().withMessage('is_active must be boolean'),
 ];
 
 // Settings validation rules

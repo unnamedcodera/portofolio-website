@@ -27,8 +27,8 @@ const Navigation: React.FC<NavigationProps> = memo(({ activeSection, setActiveSe
       return
     }
     
-    // If we're not on home page and clicking other sections, go to home first
-    if (location.pathname !== '/' && sectionId !== 'projects') {
+    // If we're not on home page, go to home first then scroll
+    if (location.pathname !== '/') {
       navigate('/')
       // Wait for navigation, then scroll
       setTimeout(() => {
@@ -40,12 +40,6 @@ const Navigation: React.FC<NavigationProps> = memo(({ activeSection, setActiveSe
           window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
         }
       }, 100)
-      return
-    }
-    
-    // If clicking projects from home page, navigate to /projects
-    if (sectionId === 'projects' && location.pathname === '/') {
-      navigate('/projects')
       return
     }
     

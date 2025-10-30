@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { inquiriesAPI } from '../services/api'
+import type { JSX } from 'react/jsx-runtime'
 
 interface ProjectFormData {
   companyName: string
@@ -17,6 +18,42 @@ interface ProjectFormData {
 
 const CTASection: React.FC = () => {
   const [showModal, setShowModal] = useState(false)
+
+  // Hide/show navigation and wave dividers when modal opens/closes
+  useEffect(() => {
+    const nav = document.querySelector('nav') as HTMLElement
+    const footer = document.querySelector('footer') as HTMLElement
+    
+    if (showModal) {
+      // Hide navigation
+      if (nav) {
+        nav.style.display = 'none'
+      }
+      // Hide footer (which contains the wave divider)
+      if (footer) {
+        footer.style.display = 'none'
+      }
+    } else {
+      // Show navigation
+      if (nav) {
+        nav.style.display = ''
+      }
+      // Show footer
+      if (footer) {
+        footer.style.display = ''
+      }
+    }
+    
+    // Cleanup function to restore everything if component unmounts
+    return () => {
+      if (nav) {
+        nav.style.display = ''
+      }
+      if (footer) {
+        footer.style.display = ''
+      }
+    }
+  }, [showModal])
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<ProjectFormData>({
     companyName: '',
@@ -31,13 +68,62 @@ const CTASection: React.FC = () => {
   })
   const [submitting, setSubmitting] = useState(false)
 
+  // Service icon components using Material Design Icons
+  const getServiceIcon = (id: string) => {
+    const icons: { [key: string]: JSX.Element } = {
+      'social-media': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+        </svg>
+      ),
+      'creative-design': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.71 4.63l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41M7 14c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1m-5 0v3c0 1.1.9 2 2 2h3c.55 0 1-.45 1-1v-1l-4-4m15.71 3.29L16.3 18.7a.996.996 0 0 1-1.41 0l-1-1a.996.996 0 0 1 0-1.41l1.41-1.41c.39-.39 1.02-.39 1.41 0l1 1c.39.39.39 1.02 0 1.41z"/>
+        </svg>
+      ),
+      'visual-branding': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71L12 2m0 3.53L15 13l-3-1.32L9 13l3-7.47z"/>
+        </svg>
+      ),
+      'web-development': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4m5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+        </svg>
+      ),
+      'architecture': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6 20V9L3 6H7V2H17V6H21L18 9V20H16V12H8V20H6M9 2V4H15V2H9M11 18V14H13V18H11Z"/>
+        </svg>
+      ),
+      'motion': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18 9H16V7H18M18 13H16V11H18M18 17H16V15H18M8 9H6V7H8M8 13H6V11H8M8 17H6V15H8M18 3V5H16V3H8V5H6V3H4V21H6V19H8V21H16V19H18V21H20V3H18Z"/>
+        </svg>
+      ),
+      'manufacturing': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 4L14.29 5.71L16 7.41V11H8V7.41L9.71 5.71L8 4L4 8V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L16 4Z"/>
+        </svg>
+      ),
+      'others': (
+        <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z"/>
+        </svg>
+      )
+    }
+    return icons[id] || icons['social-media']
+  }
+
   const projectTypes = [
-    { id: 'web', label: 'Website Design', icon: '🌐', desc: 'Corporate, E-commerce, Landing Page' },
-    { id: 'mobile', label: 'Mobile App', icon: '📱', desc: 'iOS, Android, Cross-platform' },
-    { id: 'branding', label: 'Branding', icon: '🎨', desc: 'Logo, Identity, Guidelines' },
-    { id: 'uiux', label: 'UI/UX Design', icon: '✨', desc: 'User Research, Prototyping' },
-    { id: 'graphic', label: 'Graphic Design', icon: '🖼️', desc: 'Print, Digital, Marketing' },
-    { id: 'other', label: 'Other Services', icon: '💡', desc: 'Tell us your needs' }
+    { id: 'social-media', label: 'Social Media Management', icon: '📱', desc: 'Content Strategy, Engagement, Analytics' },
+    { id: 'creative-design', label: 'Creative Design', icon: '🎨', desc: 'Graphic Design, Illustrations, Art Direction' },
+    { id: 'visual-branding', label: 'Visual Branding', icon: '✨', desc: 'Logo, Identity, Brand Guidelines' },
+    { id: 'web-development', label: 'Web Development', icon: '🌐', desc: 'Websites, E-commerce, Web Applications' },
+    { id: 'architecture', label: 'Architecture', icon: '🏛️', desc: 'Design, Planning, 3D Visualization' },
+    { id: 'motion', label: 'Motion Graphics', icon: '🎬', desc: 'Animation, Video Editing, Visual Effects' },
+    { id: 'manufacturing', label: 'Manufacturing Clothing', icon: '👕', desc: 'Fashion Design, Production, Garment Manufacturing' },
+    { id: 'others', label: 'Others Service', icon: '💼', desc: 'Custom Solutions, Consulting, Other Services' }
   ]
 
   const toggleProjectType = (id: string) => {
@@ -193,16 +279,306 @@ const CTASection: React.FC = () => {
 
   return (
     <>
-      <section id="contact" className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-16 px-6 pb-32 relative z-0 overflow-hidden bg-magnolia">
+        {/* Professional Background Art Layer - Like Banner Section */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+          {/* Pencil/Pen Icons */}
           <motion.div
-            className="bg-gradient-to-r from-vandyke to-walnut rounded-3xl p-12 text-white relative overflow-hidden"
+            className="absolute top-[10%] left-[5%]"
+            animate={{
+              rotate: [0, 15, -15, 0],
+              y: [0, -10, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" className="text-vandyke/20">
+              <path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" fill="currentColor"/>
+            </svg>
+          </motion.div>
+
+          {/* Design Tool Icon */}
+          <motion.div
+            className="absolute top-[15%] right-[8%]"
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            <svg width="110" height="110" viewBox="0 0 24 24" fill="none" className="text-walnut/15">
+              <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" fill="currentColor"/>
+            </svg>
+          </motion.div>
+
+          {/* Code Brackets */}
+          <motion.div
+            className="absolute top-[50%] left-[10%]"
+            animate={{
+              x: [0, -10, 0],
+              opacity: [0.15, 0.3, 0.15],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <svg width="90" height="90" viewBox="0 0 24 24" fill="none" className="text-battleshipgray/25">
+              <path d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" fill="currentColor"/>
+            </svg>
+          </motion.div>
+
+          {/* Camera Icon */}
+          <motion.div
+            className="absolute bottom-[25%] right-[12%]"
+            animate={{
+              scale: [1, 1.15, 1],
+              rotate: [0, 5, -5, 0],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <svg width="95" height="95" viewBox="0 0 24 24" fill="none" className="text-vandyke/18">
+              <path d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" fill="currentColor"/>
+            </svg>
+          </motion.div>
+
+          {/* Laptop/Monitor Icon */}
+          <motion.div
+            className="absolute bottom-[15%] left-[15%]"
+            animate={{
+              y: [0, -15, 0],
+              opacity: [0.2, 0.35, 0.2],
+            }}
+            transition={{
+              duration: 9,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <svg width="105" height="105" viewBox="0 0 24 24" fill="none" className="text-walnut/20">
+              <path d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z" fill="currentColor"/>
+            </svg>
+          </motion.div>
+
+          {/* Paint Brush */}
+          <motion.div
+            className="absolute top-[70%] right-[20%]"
+            animate={{
+              rotate: [0, 20, -20, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <svg width="85" height="85" viewBox="0 0 24 24" fill="none" className="text-dun/25">
+              <path d="M20.71,4.63L19.37,3.29C19,2.9 18.35,2.9 17.96,3.29L9,12.25L11.75,15L20.71,6.04C21.1,5.65 21.1,5 20.71,4.63M7,14A3,3 0 0,0 4,17C4,18.31 2.84,19 2,19C2.92,20.22 4.5,21 6,21A4,4 0 0,0 10,17A3,3 0 0,0 7,14Z" fill="currentColor"/>
+            </svg>
+          </motion.div>
+
+          {/* Geometric Shapes */}
+          <motion.div
+            className="absolute top-[35%] right-[25%] w-20 h-20 border-2 border-vandyke/10 rounded-lg"
+            animate={{
+              rotate: [0, 90, 180, 270, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+
+          <motion.div
+            className="absolute bottom-[40%] left-[8%] w-16 h-16 border-2 border-walnut/15"
+            animate={{
+              rotate: [45, 135, 225, 315, 45],
+              opacity: [0.1, 0.25, 0.1],
+            }}
+            transition={{
+              duration: 12,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+
+          {/* Dots Pattern */}
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1.5 h-1.5 rounded-full bg-battleshipgray"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+              animate={{
+                opacity: [0.05, 0.2, 0.05],
+                scale: [1, 1.5, 1]
+              }}
+              transition={{
+                duration: 3 + Math.random() * 3,
+                repeat: Infinity,
+                delay: Math.random() * 2
+              }}
+            />
+          ))}
+
+          {/* Curved Lines */}
+          <svg className="absolute top-[20%] left-[30%] w-64 h-64 opacity-10" viewBox="0 0 200 200">
+            <motion.path
+              d="M20,100 Q60,20 100,100 T180,100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="text-vandyke"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut"
+              }}
+            />
+          </svg>
+
+          <svg className="absolute bottom-[30%] right-[35%] w-48 h-48 opacity-8" viewBox="0 0 200 200">
+            <motion.path
+              d="M40,150 Q100,50 160,150"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              className="text-walnut"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                repeatType: "reverse",
+                ease: "easeInOut",
+                delay: 1
+              }}
+            />
+          </svg>
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.div
+            className="bg-gradient-to-r from-vandyke to-walnut rounded-3xl p-12 md:p-16 text-white relative overflow-hidden"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            {/* Decorative elements */}
+            {/* Animated Background Icons - Like Banner Section */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+              {/* Rocket Icon */}
+              <motion.div
+                className="absolute top-[15%] right-[12%]"
+                animate={{
+                  y: [0, -20, 0],
+                  rotate: [0, 10, -10, 0],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" className="text-magnolia/40">
+                  <path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M19.22 4C19.22 4 14.78 4.14 10 9C10 9 8.5 9.5 7 11C5.5 12.5 4.5 14 4.5 14L9 16.5C9 16.5 10.5 15.5 12 14C13.5 12.5 14 11 14 11C18.86 6.22 19 1.78 19 1.78L19.22 4M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63C15.32 5.85 16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46M8.88 16.53L7.47 15.12L8.88 16.53M6.24 22L9.88 18.36C9.54 18.27 9.21 18.12 8.91 17.91L4.83 22H6.24M2 22H3.41L8 17.41L6.59 16L2 20.59V22Z" fill="currentColor"/>
+                </svg>
+              </motion.div>
+
+              {/* Light Bulb Icon */}
+              <motion.div
+                className="absolute top-[60%] left-[8%]"
+                animate={{
+                  scale: [1, 1.15, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <svg width="70" height="70" viewBox="0 0 24 24" fill="none" className="text-dun/50">
+                  <path d="M9 21C9 21.55 9.45 22 10 22H14C14.55 22 15 21.55 15 21V20H9V21M12 2C8.14 2 5 5.14 5 9C5 11.38 6.19 13.47 8 14.74V17C8 17.55 8.45 18 9 18H15C15.55 18 16 17.55 16 17V14.74C17.81 13.47 19 11.38 19 9C19 5.14 15.86 2 12 2Z" fill="currentColor"/>
+                </svg>
+              </motion.div>
+
+              {/* Star Icon */}
+              <motion.div
+                className="absolute bottom-[20%] right-[15%]"
+                animate={{
+                  rotate: [0, 360],
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" className="text-magnolia/30">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+              </motion.div>
+
+              {/* Palette Icon */}
+              <motion.div
+                className="absolute top-[25%] left-[15%]"
+                animate={{
+                  rotate: [0, -15, 15, 0],
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  duration: 7,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <svg width="75" height="75" viewBox="0 0 24 24" fill="none" className="text-dun/40">
+                  <path d="M12,2C6.49,2 2,6.49 2,12C2,17.51 6.49,22 12,22C13.1,22 14,21.1 14,20C14,19.5 13.82,19.04 13.53,18.67C13.24,18.3 13.08,17.84 13.08,17.33C13.08,16.23 13.98,15.33 15.08,15.33H17C19.76,15.33 22,13.09 22,10.33C22,5.61 17.51,2 12,2M6.5,9C5.67,9 5,9.67 5,10.5C5,11.33 5.67,12 6.5,12C7.33,12 8,11.33 8,10.5C8,9.67 7.33,9 6.5,9M9.5,5C8.67,5 8,5.67 8,6.5C8,7.33 8.67,8 9.5,8C10.33,8 11,7.33 11,6.5C11,5.67 10.33,5 9.5,5M14.5,5C13.67,5 13,5.67 13,6.5C13,7.33 13.67,8 14.5,8C15.33,8 16,7.33 16,6.5C16,5.67 15.33,5 14.5,5M17.5,9C16.67,9 16,9.67 16,10.5C16,11.33 16.67,12 17.5,12C18.33,12 19,11.33 19,10.5C19,9.67 18.33,9 17.5,9Z" fill="currentColor"/>
+                </svg>
+              </motion.div>
+
+              {/* Target Icon */}
+              <motion.div
+                className="absolute bottom-[15%] left-[12%]"
+                animate={{
+                  scale: [1, 1.1, 1],
+                  rotate: [0, 180, 360],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              >
+                <svg width="65" height="65" viewBox="0 0 24 24" fill="none" className="text-magnolia/35">
+                  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z" fill="currentColor"/>
+                </svg>
+              </motion.div>
+            </div>
+
+            {/* Decorative gradient blurs */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-dun/20 to-transparent rounded-full -mr-32 -mt-32 blur-3xl"></div>
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-walnut/20 to-transparent rounded-full -ml-24 -mb-24 blur-3xl"></div>
             
@@ -244,21 +620,60 @@ const CTASection: React.FC = () => {
               <motion.button
                 onClick={() => setShowModal(true)}
                 className="group relative px-10 py-5 bg-white text-vandyke rounded-full font-bold text-lg shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] transition-all inline-flex items-center gap-3 overflow-hidden"
-                whileHover={{ scale: 1.05, y: -3 }}
+                whileHover={{ scale: 1.08, y: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-dun to-magnolia opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <span className="relative z-10">Start Your Project</span>
+                {/* Animated gradient overlay */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-r from-dun via-magnolia to-dun opacity-0 group-hover:opacity-30"
+                  animate={{
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                  style={{
+                    backgroundSize: '200% 100%'
+                  }}
+                />
+                
+                {/* Rocket icon with animation */}
                 <motion.svg 
                   className="w-6 h-6 relative z-10" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
+                  viewBox="0 0 24 24" 
+                  fill="currentColor"
+                  animate={{ 
+                    rotate: [0, -10, 10, -10, 0],
+                    y: [0, -3, 0, -3, 0]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  <path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 12.5L1.81 10.87L7.91 8.1C7 9.46 6.22 10.93 5.64 12.5M19.22 4C19.22 4 14.78 4.14 10 9C10 9 8.5 9.5 7 11C5.5 12.5 4.5 14 4.5 14L9 16.5C9 16.5 10.5 15.5 12 14C13.5 12.5 14 11 14 11C18.86 6.22 19 1.78 19 1.78L19.22 4M14.54 9.46C13.76 8.68 13.76 7.41 14.54 6.63C15.32 5.85 16.59 5.85 17.37 6.63C18.14 7.41 18.15 8.68 17.37 9.46C16.59 10.24 15.32 10.24 14.54 9.46M8.88 16.53L7.47 15.12L8.88 16.53M6.24 22L9.88 18.36C9.54 18.27 9.21 18.12 8.91 17.91L4.83 22H6.24M2 22H3.41L8 17.41L6.59 16L2 20.59V22Z"/>
                 </motion.svg>
+                
+                <span className="relative z-10">Start Your Project</span>
+                
+                {/* Sparkle effect */}
+                <motion.span
+                  className="relative z-10 text-xl"
+                  animate={{ 
+                    rotate: [0, 360],
+                    scale: [1, 1.2, 1]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  ✨
+                </motion.span>
               </motion.button>
               
               <motion.p 
@@ -305,7 +720,7 @@ const CTASection: React.FC = () => {
                       <img src="/src/img/DH.png" alt="DH" className="w-8 h-8 object-contain" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black mb-1 tracking-tight">Let's Start Your Project</h3>
+                      <h3 className="text-2xl font-black mb-1 tracking-tight">Darahitam Creative Lab</h3>
                       <div className="flex items-center gap-2 text-white/90 text-sm">
                         <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white/10 rounded-full backdrop-blur-sm border border-white/20">
                           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -395,7 +810,7 @@ const CTASection: React.FC = () => {
                               whileTap={{ scale: 0.98 }}
                             >
                               <div className="flex items-start gap-3">
-                                <span className="text-3xl">{type.icon}</span>
+                                <div className="text-vandyke">{getServiceIcon(type.id)}</div>
                                 <div className="flex-1">
                                   <h5 className="font-bold text-vandyke mb-1">{type.label}</h5>
                                   <p className="text-sm text-gray-500">{type.desc}</p>

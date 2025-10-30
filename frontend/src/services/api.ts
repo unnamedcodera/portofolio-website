@@ -165,8 +165,9 @@ export const categoriesAPI = {
 
 // File Upload
 export const uploadAPI = {
-  uploadImage: async (file: File) => {
+  uploadImage: async (file: File): Promise<any> => {
     const token = getToken();
+    const csrf = await getCsrfToken();
     const formData = new FormData();
     formData.append('image', file);
 
@@ -174,9 +175,22 @@ export const uploadAPI = {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,
+        'X-CSRF-Token': csrf,
       },
+      credentials: 'include',
       body: formData,
     });
+
+    // Handle 403 Forbidden (CSRF token invalid)
+    if (response.status === 403) {
+      csrfToken = null; // Reset CSRF token
+      const error = await response.json().catch(() => ({ error: 'Upload forbidden' }));
+      if (error.error?.includes('CSRF')) {
+        // Retry once with new CSRF token
+        return uploadAPI.uploadImage(file);
+      }
+      throw new Error(error.error || 'Upload forbidden');
+    }
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({ error: 'Upload failed' }));

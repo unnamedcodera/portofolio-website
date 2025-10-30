@@ -103,7 +103,7 @@ const LatestProjects: React.FC<LatestProjectsProps> = ({ showFilters = false }) 
 
   if (loading) {
     return (
-      <section className="py-20 px-6 bg-gradient-to-br from-magnolia via-white to-dun/5">
+      <section className="py-20 px-6 bg-magnolia">
         <div className="max-w-7xl mx-auto text-center">
           <div className="text-2xl text-vandyke">Loading projects...</div>
         </div>
@@ -112,7 +112,7 @@ const LatestProjects: React.FC<LatestProjectsProps> = ({ showFilters = false }) 
   }
 
   return (
-    <section className="py-20 px-6 bg-gradient-to-br from-magnolia via-magnolia/50 to-white relative overflow-hidden">
+    <section className="py-16 px-6 pb-24 bg-magnolia relative overflow-hidden">
       {/* Artistic background elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Floating shapes */}

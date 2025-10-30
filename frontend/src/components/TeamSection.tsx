@@ -156,7 +156,7 @@ const TeamSection: React.FC = () => {
 
   if (loading) {
     return (
-      <section className="py-16 px-6 bg-gradient-to-br from-magnolia via-white to-magnolia">
+      <section className="py-32 pb-48 px-6 bg-magnolia min-h-screen">
         <div className="max-w-7xl mx-auto text-center">
           <div className="text-2xl text-vandyke">Loading team...</div>
         </div>
@@ -165,34 +165,105 @@ const TeamSection: React.FC = () => {
   }
 
   return (
-    <section className="py-16 px-6 bg-gradient-to-br from-magnolia via-white to-magnolia">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
+    <section className="relative py-16 px-6 bg-magnolia overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="text-center mb-12"
+          className="absolute top-20 left-10 w-72 h-72 rounded-full bg-vandyke/5 blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-walnut/5 blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-dun/5 blur-3xl"
+          animate={{
+            scale: [1, 1.15, 1],
+            opacity: [0.2, 0.4, 0.2]
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 4
+          }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto">
+        {/* Enhanced Header with Decorative Elements */}
+        <motion.div
+          className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <span className="inline-block px-4 py-1.5 bg-vandyke/10 rounded-full text-vandyke text-sm font-medium mb-3 border border-vandyke/20">
-            Our Team
+          {/* Top Decorative Line */}
+          <motion.div
+            className="flex items-center justify-center gap-4 mb-6"
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
+          >
+            <div className="h-px w-20 bg-gradient-to-r from-transparent to-vandyke/30" />
+            <motion.div
+              animate={{
+                rotate: [0, 360]
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              <svg className="w-8 h-8 text-vandyke" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M11,17V16H9V14H13V13H10A1,1 0 0,1 9,12V9A1,1 0 0,1 10,8H15V9H13V11H15V12A1,1 0 0,1 14,13H11V15H15V17H11Z"/>
+              </svg>
+            </motion.div>
+            <div className="h-px w-20 bg-gradient-to-l from-transparent to-vandyke/30" />
+          </motion.div>
+
+          <span className="inline-block px-6 py-2 bg-gradient-to-r from-vandyke/10 via-walnut/10 to-dun/10 rounded-full text-vandyke text-sm font-semibold mb-4 border border-vandyke/20 tracking-wide">
+            OUR CREATIVE TEAM
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-vandyke via-walnut to-dun">
+          <h2 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-vandyke via-walnut to-dun mb-4">
             Meet The Experts
           </h2>
+          <p className="text-vandyke/60 text-lg max-w-2xl mx-auto">
+            Passionate professionals dedicated to bringing your creative vision to life
+          </p>
         </motion.div>
 
-        {/* Team Grid - Efficient Cards */}
+        {/* Enhanced Team Grid with Better Cards */}
         <motion.div
-          className={`grid gap-6 ${
+          className={`grid gap-8 ${
             teamData.length === 1 
               ? 'grid-cols-1 max-w-sm mx-auto' 
               : teamData.length === 2
-              ? 'grid-cols-1 md:grid-cols-2 max-w-2xl mx-auto'
+              ? 'grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto'
               : teamData.length === 3
-              ? 'grid-cols-1 md:grid-cols-3 max-w-4xl mx-auto'
-              : 'grid-cols-2 md:grid-cols-4'
+              ? 'grid-cols-1 md:grid-cols-3 max-w-5xl mx-auto'
+              : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'
           }`}
           variants={stagger}
           initial="initial"
@@ -203,18 +274,38 @@ const TeamSection: React.FC = () => {
             <motion.div
               key={member.id}
               variants={fadeInUp}
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={{ y: -12, scale: 1.03 }}
               className="group cursor-pointer"
               onClick={() => setSelectedMember(member)}
             >
               <div className="relative">
-                {/* Card Frame */}
-                <div className="relative bg-white rounded-3xl p-5 shadow-md hover:shadow-xl transition-all duration-300 border border-vandyke/10">
+                {/* Decorative Border Glow */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-vandyke/20 via-walnut/20 to-dun/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Card Frame with Glass Effect */}
+                <div className="relative bg-gradient-to-br from-white via-white to-magnolia rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-vandyke/10">
                   
-                  {/* Avatar Circle */}
-                  <div className="relative mx-auto mb-4 w-32 h-32">
+                  {/* Decorative Corner Elements */}
+                  <div className="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 border-vandyke/20 rounded-tr-xl" />
+                  <div className="absolute bottom-3 left-3 w-6 h-6 border-b-2 border-l-2 border-vandyke/20 rounded-bl-xl" />
+                  
+                  {/* Avatar Circle with Enhanced Design */}
+                  <div className="relative mx-auto mb-5 w-36 h-36">
+                    {/* Rotating Border */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full bg-gradient-to-r from-vandyke via-walnut to-dun opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      animate={{
+                        rotate: [0, 360]
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                    />
+                    
                     <motion.div 
-                      className="w-full h-full rounded-full bg-gradient-to-br from-vandyke/10 via-walnut/10 to-dun/10 flex items-center justify-center shadow-lg overflow-hidden"
+                      className="absolute inset-1 rounded-full bg-gradient-to-br from-vandyke/20 via-walnut/20 to-dun/20 flex items-center justify-center shadow-xl overflow-hidden border-4 border-white"
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.3 }}
                     >
@@ -225,32 +316,95 @@ const TeamSection: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span className="text-5xl">{member.icon || '👤'}</span>
+                        <span className="text-6xl">{member.icon || '👤'}</span>
                       )}
                     </motion.div>
                     
-                    {/* Number Badge */}
-                    <div className="absolute -top-1 -right-1 w-7 h-7 bg-gradient-to-br from-vandyke to-walnut rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
+                    {/* Animated Number Badge */}
+                    <motion.div 
+                      className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-vandyke to-walnut rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg border-2 border-white"
+                      whileHover={{ scale: 1.15, rotate: 360 }}
+                      transition={{ duration: 0.5 }}
+                    >
                       {index + 1}
-                    </div>
+                    </motion.div>
+                    
+                    {/* Pulse Effect */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full border-2 border-vandyke/30"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.5, 0, 0.5]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                    />
                   </div>
                   
-                  {/* Name & Position - Clean and Centered */}
-                  <div className="text-center">
-                    <h3 className="text-base font-bold text-vandyke mb-1 group-hover:text-walnut transition-colors">
+                  {/* Name & Position with Better Styling */}
+                  <div className="text-center space-y-2">
+                    <h3 className="text-lg font-bold text-vandyke mb-1 group-hover:text-walnut transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-xs text-walnut/70 font-medium">
+                    <p className="text-sm text-walnut/70 font-medium tracking-wide">
                       {member.position}
                     </p>
+                    
+                    {/* Skills Preview */}
+                    {parseSkills(member.skills).length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 justify-center mt-3">
+                        {parseSkills(member.skills).slice(0, 3).map((skill, idx) => (
+                          <span 
+                            key={idx}
+                            className="px-2 py-1 bg-vandyke/5 text-vandyke/70 text-xs rounded-full border border-vandyke/10"
+                          >
+                            {skill.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   
-                  {/* Minimal Divider */}
-                  <div className="mt-3 mx-auto w-12 h-0.5 bg-gradient-to-r from-transparent via-vandyke/20 to-transparent rounded-full" />
+                  {/* Decorative Divider with Dots */}
+                  <div className="flex items-center justify-center gap-2 mt-4">
+                    <div className="w-2 h-2 rounded-full bg-vandyke/20" />
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-vandyke/20 to-transparent" />
+                    <div className="w-2 h-2 rounded-full bg-vandyke/20" />
+                  </div>
+                  
+                  {/* View Profile Hint */}
+                  <motion.div
+                    className="text-center mt-3 text-xs text-vandyke/40 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    initial={{ y: 5 }}
+                    whileHover={{ y: 0 }}
+                  >
+                    Click to view profile →
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Bottom Decorative Quote */}
+        <motion.div
+          className="text-center mt-20 max-w-3xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <div className="relative">
+            <svg className="w-12 h-12 text-vandyke/20 mx-auto mb-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"/>
+            </svg>
+            <p className="text-lg text-vandyke/60 italic leading-relaxed">
+              "Creativity is intelligence having fun. Together, we transform ideas into reality."
+            </p>
+          </div>
         </motion.div>
       </div>
 
