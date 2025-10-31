@@ -43,7 +43,7 @@ PORT=5001
 JWT_SECRET=dev_secret_key_for_local_development_only
 CSRF_SECRET=dev_csrf_secret_for_local_development_only
 
-VITE_API_URL=http://localhost:5001/api
+VITE_API_URL=http://localhost:5001
 
 FRONTEND_DOMAIN=localhost:5173
 BACKEND_DOMAIN=localhost:5001
@@ -61,7 +61,7 @@ cd frontend
 npm run dev
 ```
 
-✅ Sekarang frontend akan call API ke `http://localhost:5001/api`
+✅ Sekarang frontend akan call API ke `http://localhost:5001/xxx`
 
 ---
 
@@ -102,7 +102,7 @@ PORT=5001
 JWT_SECRET=hasil_generate_jwt_64_karakter
 CSRF_SECRET=hasil_generate_csrf_64_karakter
 
-VITE_API_URL=https://api.darahitam.com/api
+VITE_API_URL=https://api.darahitam.com
 
 FRONTEND_DOMAIN=darahitam.com
 BACKEND_DOMAIN=api.darahitam.com
@@ -120,7 +120,7 @@ docker-compose -f docker-compose.prod.yml build
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-✅ Frontend production akan call API ke `https://api.darahitam.com/api`
+✅ Frontend production akan call API ke `https://api.darahitam.com/xxx`
 
 ---
 
@@ -132,7 +132,11 @@ docker-compose -f docker-compose.prod.yml up -d
 
 ```typescript
 // frontend/src/services/api.ts
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
+// API calls go directly to backend:
+// apiCall('/team') → http://localhost:5001/team
+// apiCall('/auth/login') → http://localhost:5001/auth/login
 ```
 
 **File yang dibaca:**
@@ -249,17 +253,17 @@ curl https://api.darahitam.com/api/slides
 
 ### Development
 - [ ] File `.env` exists di root
-- [ ] `VITE_API_URL=http://localhost:5001/api` di .env
+- [ ] `VITE_API_URL=http://localhost:5001` di .env (tanpa /api)
 - [ ] Frontend dev server restarted
 - [ ] Backend server restarted
-- [ ] Browser console shows calls to `localhost:5001`
+- [ ] Browser console shows calls to `localhost:5001/team` ✅
 
 ### Production
 - [ ] File `.env` exists di server
-- [ ] `VITE_API_URL=https://api.darahitam.com/api` di .env
+- [ ] `VITE_API_URL=https://api.darahitam.com` di .env
 - [ ] Frontend rebuilt dengan production config
 - [ ] Containers restarted
-- [ ] Browser console shows calls to `api.darahitam.com`
+- [ ] Browser console shows calls to `api.darahitam.com/team` ✅
 
 ---
 
@@ -299,11 +303,16 @@ docker-compose -f docker-compose.prod.yml logs -f backend
 ## 📞 Summary
 
 **Development (Local):**
-- `.env` → `VITE_API_URL=http://localhost:5001/api`
+- `.env` → `VITE_API_URL=http://localhost:5001`
 - Restart dev servers
+- Calls will be: `http://localhost:5001/team`, `http://localhost:5001/auth/login`
 
 **Production (Server):**
-- `.env` → `VITE_API_URL=https://api.darahitam.com/api`
+- `.env` → `VITE_API_URL=https://api.darahitam.com`
 - Rebuild + restart containers
+- Calls will be: `https://api.darahitam.com/team`, `https://api.darahitam.com/auth/login`
 
-**Key Point:** Frontend variable harus dimulai dengan `VITE_` dan di-embed saat build time!
+**Key Point:** 
+- Frontend variable harus dimulai dengan `VITE_` dan di-embed saat build time
+- Backend routes tidak pakai `/api` prefix lagi
+- VITE_API_URL = base URL backend

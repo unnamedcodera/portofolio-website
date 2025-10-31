@@ -6,47 +6,50 @@ A modern, full-stack portfolio website built with React, TypeScript, Node.js, an
 
 
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)## 🎨 Features
-
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
+![React](https://img.shields.io/badge/react-19.0.0-blue.svg)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue.svg)
 
-![React](https://img.shields.io/badge/react-19.0.0-blue.svg)### Frontend
+## 🌟 Features
 
+### Frontend
 - ✨ **Beautiful Artistic Design** with Framer Motion animations
-
-## 🌟 Features- 🖼️ **Frame Slider** for banner content
-
+- 🖼️ **Frame Slider** for banner content
 - 👥 **Team Section** with modal popups
-
-### Frontend- 🎨 **Latest Projects** showcase with masonry layout
-
-- **Modern React 19** with TypeScript and Vite- 📱 **Fully Responsive** design
-
-- **Framer Motion** animations throughout- 🎭 **Interactive Effects** and smooth transitions
-
+- 🎨 **Latest Projects** showcase with masonry layout
+- 📱 **Fully Responsive** design
+- 🎭 **Interactive Effects** and smooth transitions
+- **Modern React 19** with TypeScript and Vite
 - **Tailwind CSS** for responsive design
+- **Canvas Editor** for project image editing
+- **Lazy Loading** and code splitting for performance
+- **XSS Protection** with DOMPurify
+- **CSRF Protection** on all forms
 
-- **Canvas Editor** for project image editing### Backend & Admin Panel
-
-- **Lazy Loading** and code splitting for performance- 🔐 **Secure Admin Authentication** with JWT
-
-- **XSS Protection** with DOMPurify- 💾 **SQLite Database** for data persistence
-
-- **CSRF Protection** on all forms- 🔑 **Password Hashing** with bcrypt
-
+### Backend & Admin Panel
+- 🔐 **Secure Admin Authentication** with JWT
+- 💾 **MySQL Database** for data persistence
+- 🔑 **Password Hashing** with bcrypt
 - 🎯 **RESTful API** for CRUD operations
-
-### Backend- 📊 **Admin Dashboard** to manage:
-
-- **RESTful API** with Express.js  - Team Members
-
-- **SQLite Database** with better-sqlite3  - Projects/Portfolio
-
-- **JWT Authentication** with automatic expiration  - Banner Slides
-
+- 📊 **Admin Dashboard** to manage:
+  - Team Members
+  - Projects/Portfolio
+  - Banner Slides
+  - Categories
+  - Settings
 - **CSRF Token** validation
+- **Rate Limiting** for security
 
-- **Rate Limiting** (100 requests/15min, 5 login attempts/15min)## 🚀 Quick Start
+### DevOps & Deployment
+- 🚀 **CI/CD** with GitHub Actions
+- 🐳 **Docker** containerization
+- 🔒 **SSL/HTTPS** support
+- 🌐 **Nginx** reverse proxy
+- 📦 **Auto-deployment** on git push
+- 🔄 **Rollback capability**
+
+## 🚀 Quick Start
 
 - **Input Validation** with express-validator
 

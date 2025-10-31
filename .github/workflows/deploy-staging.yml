@@ -1,0 +1,62 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+      - develop  # Auto deploy saat push ke branch develop
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Staging Server
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to staging
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+        run: |
+          echo "🚀 Starting staging deployment..."
+          
+          # Upload files
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude 'dist' \
+            --exclude 'backend/node_modules' \
+            --exclude 'frontend/node_modules' \
+            --exclude 'backend/uploads' \
+            --exclude '.env' \
+            ./ $SERVER_USER@$SERVER_IP:$STAGING_PATH/
+          
+          echo "✅ Files uploaded to staging"
+
+      - name: Build and restart staging
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          STAGING_PATH: ${{ secrets.STAGING_PATH }}
+        run: |
+          ssh $SERVER_USER@$SERVER_IP << 'ENDSSH'
+            cd ${{ secrets.STAGING_PATH }}
+            docker-compose -f docker-compose.prod.yml build
+            docker-compose -f docker-compose.prod.yml up -d
+            docker-compose -f docker-compose.prod.yml ps
+          ENDSSH
+          
+          echo "✅ Staging deployment completed!"

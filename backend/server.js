@@ -36,9 +36,26 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
 }));
 
-// CORS
+// CORS - Dynamic origin handling
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://darahitam.com',
+  'https://www.darahitam.com'
+];
+
 app.use(cors({
-  origin: config.corsOrigin,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.warn(`⚠️  CORS blocked: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(cookieParser());
@@ -48,26 +65,39 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Serve static files from uploads directory with CORS headers
 app.use('/uploads', (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', config.corsOrigin);
+  const origin = req.headers.origin;
+  if (allowedOrigins.indexOf(origin) !== -1) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
 // CSRF token endpoint (public)
-app.get('/api/csrf-token', getCsrfToken);
+app.get('/csrf-token', getCsrfToken);
 
-// Routes (apply CSRF protection to protected routes)
-app.use('/api/auth', authRoutes);
-app.use('/api/team', verifyCsrfToken, teamRoutes);
-app.use('/api/projects', verifyCsrfToken, projectRoutes);
-app.use('/api/slides', verifyCsrfToken, slideRoutes);
-app.use('/api/upload', verifyCsrfToken, uploadRoutes);
-app.use('/api/categories', verifyCsrfToken, categoryRoutes);
-app.use('/api/inquiries', inquiryRoutes); // Public POST, protected PUT/DELETE
-app.use('/api/settings', settingsRoutes); // Public GET, protected PUT
+// CSRF protection for non-GET requests
+app.use((req, res, next) => {
+  // Skip CSRF for GET requests and auth routes
+  if (req.method === 'GET' || req.path.startsWith('/auth')) {
+    return next();
+  }
+  // Apply CSRF for POST, PUT, DELETE
+  verifyCsrfToken(req, res, next);
+});
+
+// Routes
+app.use('/auth', authRoutes);
+app.use('/team', teamRoutes);
+app.use('/projects', projectRoutes);
+app.use('/slides', slideRoutes);
+app.use('/upload', uploadRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/inquiries', inquiryRoutes);
+app.use('/settings', settingsRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
@@ -91,7 +121,7 @@ app.listen(config.port, () => {
 🚀 Server is running!
 📡 Port: ${config.port}
 🌍 Environment: ${config.nodeEnv}
-🔗 API: http://localhost:${config.port}/api
+🔗 API: http://localhost:${config.port}
   `);
 });
 

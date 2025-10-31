@@ -1,0 +1,104 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main  # Auto deploy saat push ke branch main
+  workflow_dispatch:  # Bisa trigger manual dari GitHub Actions tab
+
+jobs:
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_PATH: ${{ secrets.SERVER_PATH }}
+        run: |
+          echo "🚀 Starting deployment..."
+          
+          # Upload files ke server
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude 'dist' \
+            --exclude 'backend/node_modules' \
+            --exclude 'frontend/node_modules' \
+            --exclude 'backend/uploads' \
+            --exclude '.env' \
+            ./ $SERVER_USER@$SERVER_IP:$SERVER_PATH/
+          
+          echo "✅ Files uploaded"
+
+      - name: Build and restart containers
+        env:
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          SERVER_PATH: ${{ secrets.SERVER_PATH }}
+        run: |
+          ssh $SERVER_USER@$SERVER_IP << 'ENDSSH'
+            cd ${{ secrets.SERVER_PATH }}
+            
+            echo "🐳 Building Docker images..."
+            docker-compose -f docker-compose.prod.yml build
+            
+            echo "🔄 Restarting containers..."
+            docker-compose -f docker-compose.prod.yml up -d
+            
+            echo "⏳ Waiting for containers to be ready..."
+            sleep 10
+            
+            echo "📊 Container status:"
+            docker-compose -f docker-compose.prod.yml ps
+            
+            echo "✅ Deployment completed!"
+          ENDSSH
+
+      - name: Verify deployment
+        env:
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+        run: |
+          echo "🔍 Verifying deployment..."
+          
+          # Check frontend
+          if curl -f -s -o /dev/null https://darahitam.com; then
+            echo "✅ Frontend is up"
+          else
+            echo "❌ Frontend check failed"
+            exit 1
+          fi
+          
+          # Check backend
+          if curl -f -s -o /dev/null https://api.darahitam.com/health; then
+            echo "✅ Backend is up"
+          else
+            echo "❌ Backend check failed"
+            exit 1
+          fi
+          
+          echo "🎉 Deployment verified successfully!"
+
+      - name: Send notification
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment SUCCESS"
+          else
+            echo "❌ Deployment FAILED"
+          fi
