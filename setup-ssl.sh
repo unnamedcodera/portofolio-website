@@ -25,9 +25,45 @@ sudo apt install -y certbot python3-certbot-nginx
 
 echo -e "${GREEN}✅ Certbot installed${NC}"
 
-# Stop nginx container temporarily
-echo -e "${YELLOW}Stopping nginx container...${NC}"
-docker-compose -f docker-compose.prod.yml stop nginx
+# Check and stop services using port 80 and 443
+echo -e "${YELLOW}Checking for services on port 80 and 443...${NC}"
+
+# Stop Apache if running
+if systemctl is-active --quiet apache2; then
+    echo -e "${YELLOW}Stopping Apache...${NC}"
+    sudo systemctl stop apache2
+fi
+
+# Stop nginx if running as system service
+if systemctl is-active --quiet nginx; then
+    echo -e "${YELLOW}Stopping nginx service...${NC}"
+    sudo systemctl stop nginx
+fi
+
+# Stop MAMP if running (for macOS)
+if pgrep -x "httpd" > /dev/null; then
+    echo -e "${YELLOW}Stopping httpd...${NC}"
+    sudo pkill -9 httpd
+fi
+
+# Stop Docker nginx container if running
+if docker ps | grep -q "darahitam_nginx"; then
+    echo -e "${YELLOW}Stopping nginx container...${NC}"
+    docker-compose -f docker-compose.prod.yml stop nginx
+fi
+
+# Double check if ports are free
+if lsof -Pi :80 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo -e "${RED}Port 80 is still in use. Killing process...${NC}"
+    sudo kill -9 $(lsof -t -i:80) 2>/dev/null || true
+fi
+
+if lsof -Pi :443 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo -e "${RED}Port 443 is still in use. Killing process...${NC}"
+    sudo kill -9 $(lsof -t -i:443) 2>/dev/null || true
+fi
+
+echo -e "${GREEN}✅ Ports 80 and 443 are now free${NC}"
 
 # Generate certificate for frontend
 echo -e "${YELLOW}Generating certificate for $DOMAIN_FRONTEND...${NC}"
