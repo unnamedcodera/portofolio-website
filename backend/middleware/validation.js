@@ -45,14 +45,6 @@ export const teamValidation = [
   body('skills')
     .optional()
     .trim(),
-  body('email')
-    .optional()
-    .trim()
-    .isEmail().withMessage('Invalid email format')
-    .normalizeEmail(),
-  body('phone')
-    .optional()
-    .trim(),
   body('image_url')
     .optional()
     .trim(),
