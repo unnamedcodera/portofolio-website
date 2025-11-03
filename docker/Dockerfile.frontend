@@ -25,6 +25,9 @@ FROM nginx:alpine
 # Copy built files
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Copy public assets manually (Vite should do this, but being explicit)
+COPY --from=builder /app/public /usr/share/nginx/html
+
 # Copy nginx configuration for frontend only (simple)
 RUN echo 'server { \
     listen 80; \

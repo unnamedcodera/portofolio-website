@@ -6,9 +6,9 @@ import { inquiryValidation, validateRequest } from '../middleware/validation.js'
 const router = express.Router();
 
 // GET all inquiries (protected)
-router.get('/', authenticateToken, (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const inquiries = db.getAllInquiries();
+    const inquiries = await db.getAllInquiries();
     res.json(inquiries);
   } catch (error) {
     console.error('Error fetching inquiries:', error);
@@ -17,9 +17,9 @@ router.get('/', authenticateToken, (req, res) => {
 });
 
 // GET inquiries statistics (protected)
-router.get('/stats', authenticateToken, (req, res) => {
+router.get('/stats', authenticateToken, async (req, res) => {
   try {
-    const stats = db.getInquiriesStats();
+    const stats = await db.getInquiriesStats();
     res.json(stats);
   } catch (error) {
     console.error('Error fetching inquiry stats:', error);
@@ -28,10 +28,10 @@ router.get('/stats', authenticateToken, (req, res) => {
 });
 
 // GET inquiries by status (protected)
-router.get('/status/:status', authenticateToken, (req, res) => {
+router.get('/status/:status', authenticateToken, async (req, res) => {
   try {
     const { status } = req.params;
-    const inquiries = db.getInquiriesByStatus(status);
+    const inquiries = await db.getInquiriesByStatus(status);
     res.json(inquiries);
   } catch (error) {
     console.error('Error fetching inquiries by status:', error);
@@ -40,9 +40,9 @@ router.get('/status/:status', authenticateToken, (req, res) => {
 });
 
 // GET single inquiry (protected)
-router.get('/:id', authenticateToken, (req, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
-    const inquiry = db.getInquiryById(req.params.id);
+    const inquiry = await db.getInquiryById(req.params.id);
     if (!inquiry) {
       return res.status(404).json({ error: 'Inquiry not found' });
     }
