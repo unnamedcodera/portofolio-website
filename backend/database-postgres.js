@@ -517,7 +517,7 @@ export const getAdminByUsername = async (username) => {
     return {
       id: 1,
       username: config.default.admin.username,
-      password: config.default.admin.password, // This should be hashed in real app
+      password_hash: config.default.admin.password, // Will be compared with plaintext in auth
       last_login: null
     };
   }

@@ -16,21 +16,15 @@ router.post('/login', async (req, res) => {
     }
 
     // Get admin from database
-    let admin = getAdminByUsername(username);
-
-    // If no admin exists, create one with credentials from .env
-    if (!admin && username === config.admin.username) {
-      const hashedPassword = await bcrypt.hash(config.admin.password, 10);
-      createAdmin(username, hashedPassword);
-      admin = getAdminByUsername(username);
-    }
+    let admin = await getAdminByUsername(username);
 
     if (!admin) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, admin.password_hash);
+    // Verify password (simple comparison for config-based admin)
+    // In production, you should store hashed passwords in a real database
+    const isValidPassword = password === admin.password_hash;
 
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Invalid credentials' });
