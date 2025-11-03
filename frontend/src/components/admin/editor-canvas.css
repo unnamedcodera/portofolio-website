@@ -1,0 +1,443 @@
+/* Canvas Editor Styles */
+.canvas-editor-fullscreen {
+  position: fixed;
+  inset: 1rem;
+  z-index: 9999;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.canvas-editor-header {
+  background: linear-gradient(to right, #5D4037, #664228);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem 1rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.canvas-editor-content {
+  flex: 1;
+  overflow: auto;
+  padding: 2rem;
+}
+
+/* Enhanced Quill Styles */
+.quill-canvas {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.quill-canvas .ql-toolbar {
+  border: none;
+  border-bottom: 2px solid #D4C5B0;
+  background: #F8F4FF;
+  padding: 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.quill-canvas .ql-container {
+  flex: 1;
+  border: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.quill-canvas .ql-editor {
+  padding: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 600px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Resizing & Positioning */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  position: relative;
+}
+
+.ql-editor img:hover {
+  border-color: #5D4037;
+  box-shadow: 0 4px 12px rgba(93, 64, 55, 0.2);
+  transform: scale(1.02);
+}
+
+.ql-editor img:focus,
+.ql-editor img.selected {
+  border-color: #5D4037;
+  box-shadow: 0 0 0 4px rgba(93, 64, 55, 0.1);
+  outline: none;
+}
+
+/* Draggable images */
+.ql-editor img[draggable="true"] {
+  cursor: move;
+}
+
+/* Image alignment helpers */
+.ql-editor .image-left {
+  float: left;
+  margin: 0 1rem 1rem 0;
+}
+
+.ql-editor .image-right {
+  float: right;
+  margin: 0 0 1rem 1rem;
+}
+
+.ql-editor .image-center {
+  display: block;
+  margin: 1rem auto;
+}
+
+/* Toolbar customization */
+.ql-snow .ql-picker {
+  font-family: inherit;
+}
+
+.ql-snow .ql-picker-label {
+  border: 1px solid #D4C5B0;
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: white;
+}
+
+.ql-snow .ql-picker-label:hover {
+  background: #F8F4FF;
+  border-color: #5D4037;
+}
+
+.ql-snow .ql-stroke {
+  stroke: #5D4037;
+}
+
+.ql-snow .ql-fill {
+  fill: #5D4037;
+}
+
+.ql-snow .ql-picker-options {
+  background: white;
+  border: 2px solid #D4C5B0;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.ql-snow.ql-toolbar button:hover,
+.ql-snow .ql-toolbar button:hover,
+.ql-snow.ql-toolbar button:focus,
+.ql-snow .ql-toolbar button:focus,
+.ql-snow.ql-toolbar button.ql-active,
+.ql-snow .ql-toolbar button.ql-active {
+  background: #5D4037;
+  color: white;
+  border-radius: 0.25rem;
+}
+
+/* Video embeds */
+.ql-editor iframe {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Code blocks */
+.ql-editor pre {
+  background: #F8F4FF;
+  border-left: 4px solid #5D4037;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+/* Blockquotes */
+.ql-editor blockquote {
+  border-left: 4px solid #D4C5B0;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #664228;
+  font-style: italic;
+}
+
+/* Lists */
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 2rem;
+}
+
+.ql-editor li {
+  margin-bottom: 0.5rem;
+}
+
+/* Links */
+.ql-editor a {
+  color: #5D4037;
+  text-decoration: underline;
+  transition: color 0.3s;
+}
+
+.ql-editor a:hover {
+  color: #664228;
+}
+
+/* Headers */
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  color: #5D4037;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.ql-editor h1 {
+  font-size: 2.5rem;
+  border-bottom: 2px solid #D4C5B0;
+  padding-bottom: 0.5rem;
+}
+
+.ql-editor h2 {
+  font-size: 2rem;
+}
+
+.ql-editor h3 {
+  font-size: 1.75rem;
+}
+
+/* Animation for content */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ql-editor > * {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+/* Image resize handles (visual indicators) */
+.ql-editor img::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 12px;
+  height: 12px;
+  background: #5D4037;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.ql-editor img:hover::after {
+  opacity: 1;
+}
+
+/* Smooth scrolling */
+.ql-editor {
+  scroll-behavior: smooth;
+}
+
+/* Selection styling */
+.ql-editor ::selection {
+  background: rgba(93, 64, 55, 0.2);
+}
+
+/* Placeholder */
+.ql-editor.ql-blank::before {
+  color: #8D918D;
+  font-style: italic;
+  left: 3rem;
+  right: 3rem;
+}
+
+/* Zoom controls hint */
+.editor-zoom-hint {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(93, 64, 55, 0.9);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Loading state */
+.ql-editor.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .ql-editor {
+    padding: 1.5rem;
+  }
+  
+  .canvas-editor-content {
+    padding: 1rem;
+  }
+  
+  .ql-toolbar {
+    padding: 0.5rem;
+  }
+}
+
+/* Custom Context Menu Styles */
+.context-menu {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.context-menu button {
+  transition: all 0.15s ease;
+}
+
+.context-menu button:active {
+  transform: scale(0.98);
+}
+
+.context-menu button svg {
+  transition: transform 0.2s ease;
+}
+
+.context-menu button:hover svg {
+  transform: scale(1.1);
+}
+
+/* Zoom Controls */
+.zoom-controls {
+  user-select: none;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.zoom-controls button:active {
+  transform: scale(0.95);
+}
+
+/* Canvas Selection Styles */
+.canvas-container {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.canvas-container canvas {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  height: auto;
+}
+
+/* Canvas Editor Wrapper */
+.canvas-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.canvas-editor-content-area {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+}
+
+/* Responsive Canvas */
+@media (max-width: 768px) {
+  .canvas-container canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Fabric.js Custom Controls */
+.upper-canvas {
+  cursor: default !important;
+}
+
+/* Animation preview hints */
+@keyframes pulse-preview {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes rotate-preview {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-preview {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Canvas Viewer - HTML Rendered Objects */
+.canvas-viewer-container {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0 auto;
+}
+
+.canvas-viewer-content {
+  min-width: 300px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive canvas viewer */
+@media (max-width: 768px) {
+  .canvas-viewer-content {
+    transform-origin: top left;
+  }
+}
+
+/* Better text rendering */
+.canvas-text {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Image quality */
+.canvas-image {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
