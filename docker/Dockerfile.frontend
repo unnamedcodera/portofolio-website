@@ -33,6 +33,9 @@ FROM nginx:alpine
 # Copy built files (includes public assets from Vite build)
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Debug: Check what's actually in the html directory
+RUN echo "=== Final contents of /usr/share/nginx/html ===" && ls -laR /usr/share/nginx/html
+
 # Copy nginx configuration for frontend only (simple)
 RUN echo 'server { \
     listen 80; \
