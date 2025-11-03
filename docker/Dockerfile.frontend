@@ -19,14 +19,15 @@ ENV VITE_API_URL=$VITE_API_URL
 # Build application
 RUN npm run build
 
+# Debug: List what's in dist and public
+RUN echo "=== Contents of dist ===" && ls -la /app/dist/ && \
+    echo "=== Contents of dist/img (if exists) ===" && ls -la /app/dist/img/ || echo "No img folder in dist"
+
 # Production stage
 FROM nginx:alpine
 
-# Copy built files
+# Copy built files (includes public assets from Vite build)
 COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy public assets manually (Vite should do this, but being explicit)
-COPY --from=builder /app/public /usr/share/nginx/html
 
 # Copy nginx configuration for frontend only (simple)
 RUN echo 'server { \
