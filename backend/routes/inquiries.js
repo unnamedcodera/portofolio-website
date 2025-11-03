@@ -1,5 +1,5 @@
 import express from 'express';
-import * as db from '../database.js';
+import * as db from '../database-postgres.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { inquiryValidation, validateRequest } from '../middleware/validation.js';
 

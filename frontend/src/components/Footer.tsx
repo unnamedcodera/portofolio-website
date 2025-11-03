@@ -152,7 +152,7 @@ const Footer: React.FC = memo(() => {
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30">
                 <img
-                  src="/src/img/DH.png"
+                  src="/img/DH.png"
                   alt={settings.company_name}
                   className="w-6 h-6 object-contain"
                 />
@@ -224,7 +224,7 @@ const Footer: React.FC = memo(() => {
             <span>&copy; {currentYear}</span>
             <span className="font-bold text-white">{settings.company_name}</span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-white/20 to-white/10 rounded-full text-[11px] font-black tracking-[0.2em] text-white border border-white/30 shadow-lg backdrop-blur-sm">
-              <img src="/src/img/DH.png" alt="DH" className="w-3 h-3 object-contain" />
+              <img src="/img/DH.png" alt="DH" className="w-3 h-3 object-contain" />
               DRHTM
             </span>
             <span>All rights reserved.</span>

@@ -71,7 +71,7 @@ const Navigation: React.FC<NavigationProps> = memo(({ activeSection, setActiveSe
           >
             <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30">
               <img
-                src="/src/img/DH.png"
+                src="/img/DH.png"
                 alt="Darahitam Creative Lab"
                 className="w-8 h-8 object-contain"
               />

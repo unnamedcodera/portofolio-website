@@ -1,33 +1,62 @@
-# Darahitam Creative Lab - Portfolio Website# Clothing Portfolio Website with Admin Panel
+# Clothing Project# Darahitam Creative Lab - Portfolio Website# Clothing Portfolio Website with Admin Panel
 
 
 
-A modern, full-stack portfolio website built with React, TypeScript, Node.js, and SQLite. Features admin dashboard, project management, inquiry system, and dynamic content management.A beautiful, artistic portfolio website built with React, TypeScript, Tailwind CSS, and Framer Motion, featuring a complete admin panel with SQLite database backend.
+## Development
 
 
+
+Start development environment:A modern, full-stack portfolio website built with React, TypeScript, Node.js, and SQLite. Features admin dashboard, project management, inquiry system, and dynamic content management.A beautiful, artistic portfolio website built with React, TypeScript, Tailwind CSS, and Framer Motion, featuring a complete admin panel with SQLite database backend.
+
+```bash
+
+./scripts/dev-start-native.sh
+
+```
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
-![React](https://img.shields.io/badge/react-19.0.0-blue.svg)
-![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue.svg)
+
+Stop development environment:![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
+
+```bash![React](https://img.shields.io/badge/react-19.0.0-blue.svg)
+
+./scripts/dev-stop-native.sh![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue.svg)
+
+```
 
 ## 🌟 Features
 
-### Frontend
-- ✨ **Beautiful Artistic Design** with Framer Motion animations
-- 🖼️ **Frame Slider** for banner content
+View logs:
+
+```bash### Frontend
+
+./scripts/dev-logs-native.sh- ✨ **Beautiful Artistic Design** with Framer Motion animations
+
+```- 🖼️ **Frame Slider** for banner content
+
 - 👥 **Team Section** with modal popups
-- 🎨 **Latest Projects** showcase with masonry layout
+
+## Production- 🎨 **Latest Projects** showcase with masonry layout
+
 - 📱 **Fully Responsive** design
-- 🎭 **Interactive Effects** and smooth transitions
-- **Modern React 19** with TypeScript and Vite
-- **Tailwind CSS** for responsive design
-- **Canvas Editor** for project image editing
+
+Deploy to production:- 🎭 **Interactive Effects** and smooth transitions
+
+```bash- **Modern React 19** with TypeScript and Vite
+
+./scripts/deploy-to-server.sh- **Tailwind CSS** for responsive design
+
+```- **Canvas Editor** for project image editing
+
 - **Lazy Loading** and code splitting for performance
-- **XSS Protection** with DOMPurify
+
+## URLs- **XSS Protection** with DOMPurify
+
 - **CSRF Protection** on all forms
 
-### Backend & Admin Panel
+- Development: http://localhost:5173
+
+- Production: https://darahitam.iqbaltrim.com### Backend & Admin Panel
 - 🔐 **Secure Admin Authentication** with JWT
 - 💾 **MySQL Database** for data persistence
 - 🔑 **Password Hashing** with bcrypt

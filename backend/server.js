@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import config from './config.js';
+import { initDatabase } from './database-postgres.js';
 import authRoutes from './routes/auth.js';
 import teamRoutes from './routes/team.js';
 import projectRoutes from './routes/projects.js';
@@ -27,7 +28,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       scriptSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "blob:", "https:", "http://localhost:5001"],
+      imgSrc: ["'self'", "data:", "blob:", "https:", config.backendDomain],
       connectSrc: ["'self'"],
       fontSrc: ["'self'", "data:"],
     },
@@ -115,14 +116,27 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-app.listen(config.port, () => {
-  console.log(`
+// Start server with database initialization
+const startServer = async () => {
+  try {
+    // Initialize PostgreSQL database
+    await initDatabase();
+    
+    app.listen(config.port, () => {
+      console.log(`
 🚀 Server is running!
 📡 Port: ${config.port}
 🌍 Environment: ${config.nodeEnv}
-🔗 API: http://localhost:${config.port}
-  `);
-});
+�️  Database: PostgreSQL
+�🔗 API: http://localhost:${config.port}
+      `);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 export default app;

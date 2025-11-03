@@ -5,15 +5,15 @@ import {
   createBannerSlide,
   updateBannerSlide,
   deleteBannerSlide
-} from '../database.js';
+} from '../database-postgres.js';
 import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Public routes
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const slides = getBannerSlides();
+    const slides = await getBannerSlides();
     res.json(slides);
   } catch (error) {
     console.error('Error fetching banner slides:', error);
@@ -21,9 +21,9 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const slide = getBannerSlideById(req.params.id);
+    const slide = await getBannerSlideById(req.params.id);
     if (!slide) {
       return res.status(404).json({ error: 'Banner slide not found' });
     }

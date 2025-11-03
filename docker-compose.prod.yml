@@ -1,23 +1,24 @@
 services:
-  # MySQL Database
+  # PostgreSQL Database
   db:
-    image: mysql:8.0
+    image: postgres:15-alpine
     container_name: darahitam_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
       - ./backend/database.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - darahitam_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       timeout: 20s
       retries: 10
+      interval: 30s
 
   # Backend API (Node.js)
   backend:
@@ -32,10 +33,12 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      DB_PORT: 3306
+      DB_PORT: 5432
+      DB_TYPE: postgresql
       PORT: 5001
       JWT_SECRET: ${JWT_SECRET}
       CSRF_SECRET: ${CSRF_SECRET}
+      BACKEND_DOMAIN: https://api.darahitam.com
     volumes:
       - ./backend:/app
       - /app/node_modules

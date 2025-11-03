@@ -5,15 +5,15 @@ import {
   createCategory,
   updateCategory,
   deleteCategory
-} from '../database.js';
+} from '../database-postgres.js';
 import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Public routes
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const categories = getCategories();
+    const categories = await getCategories();
     res.json(categories);
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -21,9 +21,9 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const category = getCategoryById(req.params.id);
+    const category = await getCategoryById(req.params.id);
     if (!category) {
       return res.status(404).json({ error: 'Category not found' });
     }

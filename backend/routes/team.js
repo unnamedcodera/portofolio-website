@@ -5,7 +5,7 @@ import {
   createTeamMember,
   updateTeamMember,
   deleteTeamMember
-} from '../database.js';
+} from '../database-postgres.js';
 import authMiddleware from '../middleware/auth.js';
 import { teamValidation, validateRequest } from '../middleware/validation.js';
 import { verifyCsrfToken } from '../middleware/csrf.js';
@@ -13,9 +13,9 @@ import { verifyCsrfToken } from '../middleware/csrf.js';
 const router = express.Router();
 
 // Public routes
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const members = getTeamMembers();
+    const members = await getTeamMembers();
     res.json(members);
   } catch (error) {
     console.error('Error fetching team members:', error);

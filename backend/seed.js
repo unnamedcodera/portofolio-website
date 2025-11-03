@@ -14,7 +14,7 @@ const teamMembers = [
     skills: "Leadership, Creative Direction, Strategy",
     email: "john@example.com",
     phone: "+1-234-567-8901",
-    image_url: "/src/img/team/team1.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 1
   },
   {
@@ -25,7 +25,7 @@ const teamMembers = [
     skills: "UI/UX Design, Graphic Design, Branding",
     email: "jane@example.com",
     phone: "+1-234-567-8902",
-    image_url: "/src/img/team/team2.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 2
   },
   {
@@ -36,7 +36,7 @@ const teamMembers = [
     skills: "Full Stack Development, DevOps, Architecture",
     email: "mike@example.com",
     phone: "+1-234-567-8903",
-    image_url: "/src/img/team/team3.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 3
   },
   {
@@ -47,7 +47,7 @@ const teamMembers = [
     skills: "User Research, Prototyping, Visual Design",
     email: "sarah@example.com",
     phone: "+1-234-567-8904",
-    image_url: "/src/img/team/team4.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 4
   },
   {
@@ -58,7 +58,7 @@ const teamMembers = [
     skills: "Brand Strategy, Marketing, Content Creation",
     email: "david@example.com",
     phone: "+1-234-567-8905",
-    image_url: "/src/img/team/team5.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 5
   },
   {
@@ -69,7 +69,7 @@ const teamMembers = [
     skills: "Digital Marketing, Analytics, Campaign Management",
     email: "emily@example.com",
     phone: "+1-234-567-8906",
-    image_url: "/src/img/team/team6.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 6
   },
   {
@@ -80,7 +80,7 @@ const teamMembers = [
     skills: "Product Strategy, Agile, Stakeholder Management",
     email: "alex@example.com",
     phone: "+1-234-567-8907",
-    image_url: "/src/img/team/team7.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 7
   },
   {
@@ -91,7 +91,7 @@ const teamMembers = [
     skills: "Operations Management, Process Optimization, Leadership",
     email: "lisa@example.com",
     phone: "+1-234-567-8908",
-    image_url: "/src/img/team/team8.jpg",
+    image_url: "/img/placeholder-team.jpg",
     display_order: 8
   }
 ];
@@ -160,7 +160,7 @@ const bannerSlides = [
     title: "Manufacturing Excellence",
     subtitle: "Quality in Every Detail",
     description: "Premium quality production with attention to every detail",
-    image_url: "/src/img/slides/manufacturing.jpg",
+    image_url: "/img/placeholder-slide.jpg",
     button_text: "Learn More",
     button_link: "#",
     display_order: 1,
@@ -170,7 +170,7 @@ const bannerSlides = [
     title: "Brand Identity",
     subtitle: "Stand Out from the Crowd",
     description: "Creating memorable brands that stand out",
-    image_url: "/src/img/slides/branding.jpg",
+    image_url: "/img/placeholder-slide.jpg",
     button_text: "View Projects",
     button_link: "#projects",
     display_order: 2,
@@ -180,7 +180,7 @@ const bannerSlides = [
     title: "Architecture & Design",
     subtitle: "Spaces That Inspire",
     description: "Innovative spaces that inspire and function beautifully",
-    image_url: "/src/img/slides/architecture.jpg",
+    image_url: "/img/placeholder-slide.jpg",
     button_text: "Explore",
     button_link: "#",
     display_order: 3,
@@ -190,7 +190,7 @@ const bannerSlides = [
     title: "Web Development",
     subtitle: "Digital Solutions",
     description: "Modern, responsive websites that drive results",
-    image_url: "/src/img/slides/web-dev.jpg",
+    image_url: "/img/placeholder-slide.jpg",
     button_text: "Get Started",
     button_link: "#contact",
     display_order: 4,
@@ -200,7 +200,7 @@ const bannerSlides = [
     title: "Motion Graphics",
     subtitle: "Bring Ideas to Life",
     description: "Dynamic animations that captivate and engage",
-    image_url: "/src/img/slides/motion.jpg",
+    image_url: "/img/placeholder-slide.jpg",
     button_text: "Watch Demo",
     button_link: "#",
     display_order: 5,

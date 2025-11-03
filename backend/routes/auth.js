@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { getAdminByUsername, createAdmin, updateLastLogin } from '../database.js';
+import { getAdminByUsername, createAdmin, updateLastLogin } from '../database-postgres.js';
 import config from '../config.js';
 
 const router = express.Router();

@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import Swal from 'sweetalert2'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
-import { uploadAPI, categoriesAPI } from '../../services/api'
+import { uploadAPI, categoriesAPI, getApiBaseUrl } from '../../services/api'
 
 interface Skill {
   name: string
@@ -246,7 +246,7 @@ const FormModal: React.FC<FormModalProps> = ({
     
     try {
       const result = await uploadAPI.uploadImage(file)
-      const imageUrl = `http://localhost:5001${result.imageUrl}`
+      const imageUrl = `${getApiBaseUrl()}${result.imageUrl}`
       setFormData({ ...formData, image_url: imageUrl })
       
       Swal.fire({
@@ -288,7 +288,7 @@ const FormModal: React.FC<FormModalProps> = ({
     
     try {
       const result = await uploadAPI.uploadImage(file)
-      const bannerUrl = `http://localhost:5001${result.imageUrl}`
+      const bannerUrl = `${getApiBaseUrl()}${result.imageUrl}`
       setFormData({ ...formData, banner_image: bannerUrl })
       
       Swal.fire({
@@ -330,7 +330,7 @@ const FormModal: React.FC<FormModalProps> = ({
     
     try {
       const result = await uploadAPI.uploadImage(file)
-      const thumbnailUrl = `http://localhost:5001${result.imageUrl}`
+      const thumbnailUrl = `${getApiBaseUrl()}${result.imageUrl}`
       setFormData({ ...formData, image_url: thumbnailUrl })
       
       Swal.fire({

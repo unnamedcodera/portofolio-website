@@ -3,7 +3,7 @@
     "id": 1,
     "name": "John Doe",
     "position": "Creative Director",
-    "image": "/src/img/team/team1.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Leading our creative vision with 10+ years of experience in design and innovation.",
     "icon": "🎨"
   },
@@ -11,7 +11,7 @@
     "id": 2,
     "name": "Jane Smith",
     "position": "Lead Designer",
-    "image": "/src/img/team/team2.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Crafting beautiful and functional designs that bring ideas to life.",
     "icon": "✨"
   },
@@ -19,7 +19,7 @@
     "id": 3,
     "name": "Mike Johnson",
     "position": "Tech Lead",
-    "image": "/src/img/team/team3.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Building robust solutions with cutting-edge technology and best practices.",
     "icon": "💻"
   },
@@ -27,7 +27,7 @@
     "id": 4,
     "name": "Sarah Williams",
     "position": "UI/UX Designer",
-    "image": "/src/img/team/team4.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Creating beautiful user experiences with passion and precision.",
     "icon": "🎭"
   },
@@ -35,7 +35,7 @@
     "id": 5,
     "name": "David Chen",
     "position": "Brand Strategist",
-    "image": "/src/img/team/team5.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Building powerful brands that resonate with audiences.",
     "icon": "🎯"
   },
@@ -43,7 +43,7 @@
     "id": 6,
     "name": "Emily Rodriguez",
     "position": "Marketing Manager",
-    "image": "/src/img/team/team6.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Driving growth through innovative marketing strategies.",
     "icon": "📊"
   },
@@ -51,7 +51,7 @@
     "id": 7,
     "name": "Alex Turner",
     "position": "Product Manager",
-    "image": "/src/img/team/team7.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Transforming ideas into successful products.",
     "icon": "🚀"
   },
@@ -59,7 +59,7 @@
     "id": 8,
     "name": "Lisa Anderson",
     "position": "Operations Lead",
-    "image": "/src/img/team/team8.jpg",
+    "image": "/img/placeholder-team.jpg",
     "bio": "Ensuring smooth operations and exceptional delivery.",
     "icon": "⚙️"
   }

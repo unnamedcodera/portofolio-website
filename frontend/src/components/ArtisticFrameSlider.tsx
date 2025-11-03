@@ -35,9 +35,10 @@ const ArtisticFrameSlider: React.FC = () => {
     const fetchSlides = async () => {
       try {
         const data = await slidesAPI.getAll()
-        setSlides(data)
+        setSlides(data || [])
       } catch (error) {
         console.error('Error fetching slides:', error)
+        setSlides([])
       } finally {
         setLoading(false)
       }
@@ -274,11 +275,11 @@ const ArtisticFrameSlider: React.FC = () => {
               }}
             >
               {/* Background Image for Preview */}
-              {slides[(currentIndex - 1 + slides.length) % slides.length].image_url && (
+              {slides[(currentIndex - 1 + slides.length) % slides.length]?.image_url && (
                 <div className="absolute inset-0">
                   <img
                     src={slides[(currentIndex - 1 + slides.length) % slides.length].image_url}
-                    alt={slides[(currentIndex - 1 + slides.length) % slides.length].title}
+                    alt={slides[(currentIndex - 1 + slides.length) % slides.length]?.title || ''}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/50"></div>
@@ -290,12 +291,12 @@ const ArtisticFrameSlider: React.FC = () => {
                   className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white text-center drop-shadow-lg"
                   whileHover={{ scale: 1.05 }}
                 >
-                  {slides[(currentIndex - 1 + slides.length) % slides.length].title}
+                  {slides[(currentIndex - 1 + slides.length) % slides.length]?.title}
                 </motion.h3>
                 
                 {/* DH Trademark with pulse */}
                 <motion.img
-                  src="/src/img/DH.png"
+                  src="/img/DH.png"
                   alt="DH"
                   className="absolute bottom-2 right-2 w-6 sm:w-8 h-auto object-contain opacity-30"
                   animate={{ 
@@ -409,11 +410,11 @@ const ArtisticFrameSlider: React.FC = () => {
                 transition={{ duration: 0.3 }}
               >
                 {/* Background Image with Overlay */}
-                {slides[currentIndex].image_url && (
+                {slides[currentIndex]?.image_url && (
                   <div className="absolute inset-0">
                     <img
                       src={slides[currentIndex].image_url}
-                      alt={slides[currentIndex].title}
+                      alt={slides[currentIndex]?.title || ''}
                       className="w-full h-full object-cover"
                     />
                     {/* Dark overlay for text readability */}
@@ -431,7 +432,7 @@ const ArtisticFrameSlider: React.FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.6 }}
                   >
-                    {slides[currentIndex].title}
+                    {slides[currentIndex]?.title}
                   </motion.h2>
                   
                   {/* Slide Description */}
@@ -441,7 +442,7 @@ const ArtisticFrameSlider: React.FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.6 }}
                   >
-                    {slides[currentIndex].description}
+                    {slides[currentIndex]?.description}
                   </motion.p>
 
                   {/* DH Trademark Watermark */}
@@ -452,7 +453,7 @@ const ArtisticFrameSlider: React.FC = () => {
                     transition={{ delay: 0.8, duration: 0.6 }}
                   >
                     <img
-                      src="/src/img/DH.png"
+                      src="/img/DH.png"
                       alt="DH Trademark"
                       className="w-10 sm:w-16 md:w-20 h-auto object-contain drop-shadow-lg"
                     />
@@ -519,11 +520,11 @@ const ArtisticFrameSlider: React.FC = () => {
               }}
             >
               {/* Background Image for Preview */}
-              {slides[(currentIndex + 1) % slides.length].image_url && (
+              {slides[(currentIndex + 1) % slides.length]?.image_url && (
                 <div className="absolute inset-0">
                   <img
                     src={slides[(currentIndex + 1) % slides.length].image_url}
-                    alt={slides[(currentIndex + 1) % slides.length].title}
+                    alt={slides[(currentIndex + 1) % slides.length]?.title || ''}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/50"></div>
@@ -535,12 +536,12 @@ const ArtisticFrameSlider: React.FC = () => {
                   className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-white text-center drop-shadow-lg"
                   whileHover={{ scale: 1.05 }}
                 >
-                  {slides[(currentIndex + 1) % slides.length].title}
+                  {slides[(currentIndex + 1) % slides.length]?.title}
                 </motion.h3>
                 
                 {/* DH Trademark with pulse */}
                 <motion.img
-                  src="/src/img/DH.png"
+                  src="/img/DH.png"
                   alt="DH"
                   className="absolute bottom-2 right-2 w-6 sm:w-8 h-auto object-contain opacity-30"
                   animate={{ 

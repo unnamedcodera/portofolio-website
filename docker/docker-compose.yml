@@ -1,6 +1,28 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: darahitam-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-darahitam_dev}
+      POSTGRES_USER: ${DB_USER:-darahitam}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dev_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ../backend/database.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - darahitam-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-darahitam} -d ${DB_NAME:-darahitam_dev}"]
+      timeout: 20s
+      retries: 10
+      interval: 30s
+
   backend:
     build:
       context: ..
@@ -9,14 +31,22 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=5001
+      - DB_HOST=db
+      - DB_USER=${DB_USER:-darahitam}
+      - DB_PASSWORD=${DB_PASSWORD:-dev_password}
+      - DB_NAME=${DB_NAME:-darahitam_dev}
+      - DB_PORT=5432
+      - DB_TYPE=postgresql
       - JWT_SECRET=${JWT_SECRET:-change-this-in-production-use-env-file}
       - CSRF_SECRET=${CSRF_SECRET:-change-this-in-production-use-env-file}
-      - CORS_ORIGIN=http://localhost
+      - CORS_ORIGIN=http://localhost:5173
     volumes:
-      - ../backend/database.db:/app/database.db
       - uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - darahitam-network
     restart: unless-stopped
@@ -42,6 +72,8 @@ services:
 
 volumes:
   uploads:
+    driver: local
+  db_data:
     driver: local
 
 networks:

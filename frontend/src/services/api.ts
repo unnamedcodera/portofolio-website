@@ -1,5 +1,8 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
+// Export API_BASE_URL for use in components
+export const getApiBaseUrl = () => API_BASE_URL;
+
 // Get token from localStorage
 const getToken = () => localStorage.getItem('admin_token');
 

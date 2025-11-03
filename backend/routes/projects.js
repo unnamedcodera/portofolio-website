@@ -6,15 +6,15 @@ import {
   createProject,
   updateProject,
   deleteProject
-} from '../database.js';
+} from '../database-postgres.js';
 import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Public routes
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const projects = getProjects();
+    const projects = await getProjects();
     res.json(projects);
   } catch (error) {
     console.error('Error fetching projects:', error);
@@ -22,17 +22,17 @@ router.get('/', (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     let project;
     
     // Check if it's a slug (contains non-numeric characters) or ID (numeric only)
     if (/^\d+$/.test(req.params.id)) {
       // It's a numeric ID
-      project = getProjectById(req.params.id);
+      project = await getProjectById(parseInt(req.params.id));
     } else {
       // It's a slug
-      project = getProjectBySlug(req.params.id);
+      project = await getProjectBySlug(req.params.id);
     }
     
     if (!project) {
@@ -46,11 +46,11 @@ router.get('/:id', (req, res) => {
 });
 
 // Protected routes (require authentication)
-router.post('/', authMiddleware, (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
     console.log('Creating project with data:', req.body);
-    const result = createProject(req.body);
-    res.status(201).json({ success: true, id: result.lastInsertRowid });
+    const result = await createProject(req.body);
+    res.status(201).json({ success: true, id: result.id });
   } catch (error) {
     console.error('Error creating project:', error);
     console.error('Error stack:', error.stack);
@@ -59,11 +59,11 @@ router.post('/', authMiddleware, (req, res) => {
   }
 });
 
-router.put('/:id', authMiddleware, (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
     console.log('Updating project:', req.params.id, 'with data:', req.body);
-    const result = updateProject(req.params.id, req.body);
-    if (result.changes === 0) {
+    const result = await updateProject(req.params.id, req.body);
+    if (!result) {
       return res.status(404).json({ error: 'Project not found' });
     }
     res.json({ success: true });
@@ -75,10 +75,10 @@ router.put('/:id', authMiddleware, (req, res) => {
   }
 });
 
-router.delete('/:id', authMiddleware, (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
-    const result = deleteProject(req.params.id);
-    if (result.changes === 0) {
+    const result = await deleteProject(req.params.id);
+    if (!result) {
       return res.status(404).json({ error: 'Project not found' });
     }
     res.json({ success: true });

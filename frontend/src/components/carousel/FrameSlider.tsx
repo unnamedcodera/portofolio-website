@@ -96,7 +96,7 @@ export const FrameSlider: React.FC<FrameSliderProps> = ({
                         <div className="absolute inset-0 flex items-center justify-center p-8">
                           <div className="relative">
                             <img
-                              src="/src/img/NEWS DHH.png"
+                              src="/img/NEWS DHH.png"
                               alt="NEWS DHH - Official Trademark"
                               className="max-w-full max-h-full object-contain drop-shadow-2xl"
                               style={{ filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.3))' }}

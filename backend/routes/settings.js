@@ -1,13 +1,13 @@
 import express from 'express';
-import { getSettings, updateSettings } from '../database.js';
+import { getSettings, updateSettings } from '../database-postgres.js';
 import authMiddleware from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Public route - Get settings
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const settings = getSettings();
+    const settings = await getSettings();
     res.json(settings);
   } catch (error) {
     console.error('Error fetching settings:', error);
@@ -16,9 +16,9 @@ router.get('/', (req, res) => {
 });
 
 // Protected route - Update settings
-router.put('/', authMiddleware, (req, res) => {
+router.put('/', authMiddleware, async (req, res) => {
   try {
-    updateSettings(req.body);
+    await updateSettings(req.body);
     res.json({ success: true, message: 'Settings updated successfully' });
   } catch (error) {
     console.error('Error updating settings:', error);

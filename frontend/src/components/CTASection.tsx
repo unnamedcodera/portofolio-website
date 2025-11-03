@@ -717,7 +717,7 @@ const CTASection: React.FC = () => {
                   <div className="flex items-center gap-4">
                     {/* Logo Badge */}
                     <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-lg">
-                      <img src="/src/img/DH.png" alt="DH" className="w-8 h-8 object-contain" />
+                      <img src="/img/DH.png" alt="DH" className="w-8 h-8 object-contain" />
                     </div>
                     <div>
                       <h3 className="text-2xl font-black mb-1 tracking-tight">Darahitam Creative Lab</h3>

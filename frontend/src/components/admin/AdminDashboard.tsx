@@ -301,7 +301,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   transition={{ duration: 0.5 }}
                 >
                   <img 
-                    src="/src/img/DH.png" 
+                    src="/img/DH.png" 
                     alt="DRHTM" 
                     className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
                   />
