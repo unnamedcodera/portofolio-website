@@ -12,6 +12,10 @@ RUN npm ci
 # Copy application files
 COPY . ./
 
+# Debug: Check if public folder exists
+RUN echo "=== Checking public folder ===" && ls -la /app/ && \
+    echo "=== Contents of public ===" && ls -la /app/public/ || echo "No public folder!"
+
 # Build argument for API URL
 ARG VITE_API_URL=https://api.darahitam.com
 ENV VITE_API_URL=$VITE_API_URL
