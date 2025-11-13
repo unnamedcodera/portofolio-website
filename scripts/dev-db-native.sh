@@ -2,7 +2,7 @@
 
 echo "🗄️  Connecting to PostgreSQL Database..."
 echo "💡 You'll be connected to the development database"
-echo "📝 Database: darahitam_dev, User: darahitam"
+echo "📝 Database: darahitam_db, User: darahitam_user"
 echo ""
 
 # Check if PostgreSQL is running
@@ -13,4 +13,4 @@ if ! brew services list | grep -q "postgresql@15.*started"; then
 fi
 
 # Connect to database
-psql -h localhost -U darahitam -d darahitam_dev
+psql -h localhost -U darahitam_user -d darahitam_db
