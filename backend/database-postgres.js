@@ -98,12 +98,19 @@ const createTables = async () => {
         image_url TEXT,
         banner_image TEXT,
         category_id INTEGER,
+        category VARCHAR(255),
+        content TEXT,
+        canvas_content TEXT,
+        slug VARCHAR(255) UNIQUE,
+        author VARCHAR(255),
+        tags TEXT,
         status VARCHAR(50) DEFAULT 'active',
         featured BOOLEAN DEFAULT false,
         display_order INTEGER DEFAULT 0,
-        canvas_data TEXT,
+        views INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        published_at TIMESTAMP
       )
     `);
 
@@ -258,16 +265,19 @@ export const getProjectBySlug = async (slug) => {
 export const createProject = async (data) => {
   const { 
     title, description, short_description, image_url, banner_image, 
-    category_id, status = 'active', featured = false, display_order = 0, canvas_data 
+    category_id, category, content, canvas_content, slug, author, tags,
+    status = 'active', featured = false, display_order = 0, views = 0
   } = data;
   
   const result = await query(`
     INSERT INTO projects (title, description, short_description, image_url, banner_image, 
-                         category_id, status, featured, display_order, canvas_data)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+                         category_id, category, content, canvas_content, slug, author, tags,
+                         status, featured, display_order, views)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
     RETURNING *
   `, [title, description, short_description, image_url, banner_image, 
-      category_id, status, featured, display_order, canvas_data]);
+      category_id, category, content, canvas_content, slug, author, tags,
+      status, featured, display_order, views]);
   
   return result.rows[0];
 };
@@ -275,18 +285,22 @@ export const createProject = async (data) => {
 export const updateProject = async (id, data) => {
   const { 
     title, description, short_description, image_url, banner_image, 
-    category_id, status, featured, display_order, canvas_data 
+    category_id, category, content, canvas_content, slug, author, tags,
+    status, featured, display_order, views
   } = data;
   
   const result = await query(`
     UPDATE projects 
     SET title = $1, description = $2, short_description = $3, image_url = $4, 
-        banner_image = $5, category_id = $6, status = $7, featured = $8, 
-        display_order = $9, canvas_data = $10, updated_at = CURRENT_TIMESTAMP
-    WHERE id = $11
+        banner_image = $5, category_id = $6, category = $7, content = $8,
+        canvas_content = $9, slug = $10, author = $11, tags = $12,
+        status = $13, featured = $14, display_order = $15, views = $16,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE id = $17
     RETURNING *
   `, [title, description, short_description, image_url, banner_image, 
-      category_id, status, featured, display_order, canvas_data, id]);
+      category_id, category, content, canvas_content, slug, author, tags,
+      status, featured, display_order, views, id]);
   
   return result.rows[0];
 };
