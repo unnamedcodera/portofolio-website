@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion'
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { cn } from '../../utils/cn'
 
 // 3D Tilt Card - Apple-style

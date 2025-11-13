@@ -1,16 +1,10 @@
 import { motion } from 'framer-motion'
 import ArtisticFrameSlider from './ArtisticFrameSlider'
-import { 
-  GlassmorphicCard, 
-  ParticleBackground, 
-  MagneticButton,
-  GradientOrb
+import {
+  ParticleBackground,
+  GradientOrb,
+  NoiseTexture
 } from './ui/Modern2025'
-import { 
-  RippleButton,
-  NoiseTexture,
-  SplitText
-} from './ui/Interactive3D'
 import { Sparkles, ArrowRight, Zap } from 'lucide-react'
 
 const BannerSection: React.FC = () => {
