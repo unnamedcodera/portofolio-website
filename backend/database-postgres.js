@@ -300,23 +300,35 @@ export const updateProject = async (id, data) => {
     category_id, status, is_featured, display_order, canvas_content 
   } = data;
   
-  // Generate new slug if title changed
+  // Get existing project to preserve slug if not provided
+  const existing = await getRow('SELECT * FROM projects WHERE id = $1', [id]);
+  if (!existing) {
+    throw new Error('Project not found');
+  }
+  
+  // Use provided slug or generate from title or keep existing
   let slug = data.slug;
-  if (!slug && title) {
-    slug = generateSlug(title);
-    // Ensure slug is unique (excluding current project)
-    let finalSlug = slug;
-    let counter = 1;
-    while (true) {
-      const existing = await getRow(
-        'SELECT id FROM projects WHERE slug = $1 AND id != $2', 
-        [finalSlug, id]
-      );
-      if (!existing) break;
-      finalSlug = `${slug}-${counter}`;
-      counter++;
+  if (!slug) {
+    if (title && title !== existing.title) {
+      // Title changed, generate new slug
+      slug = generateSlug(title);
+      // Ensure slug is unique (excluding current project)
+      let finalSlug = slug;
+      let counter = 1;
+      while (true) {
+        const duplicate = await getRow(
+          'SELECT id FROM projects WHERE slug = $1 AND id != $2', 
+          [finalSlug, id]
+        );
+        if (!duplicate) break;
+        finalSlug = `${slug}-${counter}`;
+        counter++;
+      }
+      slug = finalSlug;
+    } else {
+      // Keep existing slug
+      slug = existing.slug;
     }
-    slug = finalSlug;
   }
   
   const result = await query(`
@@ -326,8 +338,12 @@ export const updateProject = async (id, data) => {
         display_order = $10, canvas_content = $11, updated_at = CURRENT_TIMESTAMP
     WHERE id = $12
     RETURNING *
-  `, [title, slug, description, short_description, image_url, banner_image, 
-      category_id, status, is_featured, display_order, canvas_content, id]);
+  `, [title || existing.title, slug, description || existing.description, 
+      short_description || existing.short_description, image_url || existing.image_url, 
+      banner_image || existing.banner_image, category_id || existing.category_id, 
+      status || existing.status, is_featured !== undefined ? is_featured : existing.is_featured, 
+      display_order !== undefined ? display_order : existing.display_order, 
+      canvas_content !== undefined ? canvas_content : existing.canvas_content, id]);
   
   return result.rows[0];
 };
