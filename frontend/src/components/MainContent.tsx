@@ -139,46 +139,6 @@ const MainContent = () => {
               </motion.div>
               <div className="flex-1 h-px bg-gradient-to-l from-transparent via-vandyke/20 to-vandyke/30" />
             </motion.div>
-
-            {/* Title Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <h3 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-vandyke via-walnut to-dun mb-3">
-                Meet the Creative Minds
-              </h3>
-              <p className="text-vandyke/60 text-base max-w-2xl mx-auto leading-relaxed">
-                Behind every great project is a passionate team of experts ready to bring your vision to life
-              </p>
-            </motion.div>
-
-            {/* Decorative Bottom Element */}
-            <motion.div
-              className="flex items-center justify-center gap-3 mt-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              viewport={{ once: true }}
-            >
-              {[...Array(5)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="w-2 h-2 rounded-full bg-vandyke/30"
-                  animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.3, 1, 0.3]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.2
-                  }}
-                />
-              ))}
-            </motion.div>
           </motion.div>
 
           {/* Ambient Floating Elements */}

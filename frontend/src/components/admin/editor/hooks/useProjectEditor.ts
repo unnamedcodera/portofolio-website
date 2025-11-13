@@ -103,22 +103,9 @@ export const useProjectEditor = () => {
       return
     }
 
-    // Map frontend field names to backend field names
+    // Ensure image URLs are strings, not objects
     const cleanedData = {
-      title: formData.title,
-      description: formData.description,
-      short_description: formData.description, // Use description as short_description
-      content: formData.content,
-      canvas_content: formData.canvas_content,
-      category: formData.category,
-      category_id: null, // Will be set by backend based on category name
-      author: formData.author || 'Admin',
-      slug: formData.slug || formData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, ''),
-      tags: '', // Add if you have tags
-      status: 'active',
-      featured: formData.is_featured, // Map is_featured to featured
-      display_order: formData.display_order || 0,
-      views: 0,
+      ...formData,
       banner_image: typeof formData.banner_image === 'string' 
         ? formData.banner_image 
         : (formData.banner_image as any)?.imageUrl 
@@ -130,8 +117,6 @@ export const useProjectEditor = () => {
           ? `${getApiBaseUrl()}${(formData.image_url as any).imageUrl}`
           : ''
     }
-
-    console.log('Saving project with data:', cleanedData)
     
     setSaving(true)
     try {
@@ -143,9 +128,9 @@ export const useProjectEditor = () => {
         Swal.fire('Success', 'Project created successfully!', 'success')
       }
       return true
-    } catch (error: any) {
+    } catch (error) {
       console.error('Save error:', error)
-      Swal.fire('Error', error?.message || 'Failed to save project', 'error')
+      Swal.fire('Error', 'Failed to save project', 'error')
       return false
     } finally {
       setSaving(false)

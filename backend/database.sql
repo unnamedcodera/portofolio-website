@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS projects (
   author VARCHAR(255),
   tags TEXT,
   status VARCHAR(50) DEFAULT 'draft',
-  featured BOOLEAN DEFAULT FALSE,
+  is_featured BOOLEAN DEFAULT FALSE,
   display_order INTEGER DEFAULT 0,
   views INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS inquiries (
 CREATE INDEX IF NOT EXISTS idx_projects_slug ON projects(slug);
 CREATE INDEX IF NOT EXISTS idx_projects_category ON projects(category);
 CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
-CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);
+CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(is_featured);
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
 CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status);
 CREATE INDEX IF NOT EXISTS idx_inquiries_email ON inquiries(email);

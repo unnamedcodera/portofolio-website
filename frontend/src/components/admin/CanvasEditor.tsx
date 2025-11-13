@@ -88,21 +88,8 @@ const CanvasEditor: React.FC<CanvasEditorProps> = ({ content, onChange, isFullsc
     const canvas = new fabric.Canvas(canvasRef.current, {
       width: canvasWidth,
       height: finalHeight,
-      backgroundColor: '#ffffff', // White background for better visibility
+      backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent background for WYSIWYG
       preserveObjectStacking: true,
-      renderOnAddRemove: true,
-      enableRetinaScaling: true,
-    })
-
-    // Configure default object properties to remove shadows
-    fabric.Object.prototype.set({
-      transparentCorners: false,
-      cornerColor: '#5D4037',
-      cornerSize: 8,
-      cornerStyle: 'circle',
-      borderColor: '#5D4037',
-      borderScaleFactor: 2,
-      padding: 5,
     })
 
     fabricCanvasRef.current = canvas

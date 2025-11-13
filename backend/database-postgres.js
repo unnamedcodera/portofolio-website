@@ -67,6 +67,14 @@ const transaction = async (callback) => {
   }
 };
 
+// Helper function to generate slug from title
+const generateSlug = (title) => {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 // Create tables
 const createTables = async () => {
   try {
@@ -93,24 +101,18 @@ const createTables = async () => {
       CREATE TABLE IF NOT EXISTS projects (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) UNIQUE,
         description TEXT,
         short_description TEXT,
         image_url TEXT,
         banner_image TEXT,
         category_id INTEGER,
-        category VARCHAR(255),
-        content TEXT,
-        canvas_content TEXT,
-        slug VARCHAR(255) UNIQUE,
-        author VARCHAR(255),
-        tags TEXT,
         status VARCHAR(50) DEFAULT 'active',
         featured BOOLEAN DEFAULT false,
         display_order INTEGER DEFAULT 0,
-        views INTEGER DEFAULT 0,
+        canvas_data TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        published_at TIMESTAMP
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
@@ -258,26 +260,36 @@ export const getProjectBySlug = async (slug) => {
     SELECT p.*, c.name as category_name
     FROM projects p
     LEFT JOIN categories c ON p.category_id = c.id
-    WHERE p.title = $1
+    WHERE p.slug = $1
   `, [slug]);
 };
 
 export const createProject = async (data) => {
   const { 
     title, description, short_description, image_url, banner_image, 
-    category_id, category, content, canvas_content, slug, author, tags,
-    status = 'active', featured = false, display_order = 0, views = 0
+    category_id, status = 'active', featured = false, display_order = 0, canvas_data 
   } = data;
   
+  // Generate slug from title if not provided
+  let slug = data.slug || generateSlug(title);
+  
+  // Ensure slug is unique
+  let finalSlug = slug;
+  let counter = 1;
+  while (true) {
+    const existing = await getRow('SELECT id FROM projects WHERE slug = $1', [finalSlug]);
+    if (!existing) break;
+    finalSlug = `${slug}-${counter}`;
+    counter++;
+  }
+  
   const result = await query(`
-    INSERT INTO projects (title, description, short_description, image_url, banner_image, 
-                         category_id, category, content, canvas_content, slug, author, tags,
-                         status, featured, display_order, views)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+    INSERT INTO projects (title, slug, description, short_description, image_url, banner_image, 
+                         category_id, status, featured, display_order, canvas_data)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     RETURNING *
-  `, [title, description, short_description, image_url, banner_image, 
-      category_id, category, content, canvas_content, slug, author, tags,
-      status, featured, display_order, views]);
+  `, [title, finalSlug, description, short_description, image_url, banner_image, 
+      category_id, status, featured, display_order, canvas_data]);
   
   return result.rows[0];
 };
@@ -285,22 +297,37 @@ export const createProject = async (data) => {
 export const updateProject = async (id, data) => {
   const { 
     title, description, short_description, image_url, banner_image, 
-    category_id, category, content, canvas_content, slug, author, tags,
-    status, featured, display_order, views
+    category_id, status, featured, display_order, canvas_data 
   } = data;
+  
+  // Generate new slug if title changed
+  let slug = data.slug;
+  if (!slug && title) {
+    slug = generateSlug(title);
+    // Ensure slug is unique (excluding current project)
+    let finalSlug = slug;
+    let counter = 1;
+    while (true) {
+      const existing = await getRow(
+        'SELECT id FROM projects WHERE slug = $1 AND id != $2', 
+        [finalSlug, id]
+      );
+      if (!existing) break;
+      finalSlug = `${slug}-${counter}`;
+      counter++;
+    }
+    slug = finalSlug;
+  }
   
   const result = await query(`
     UPDATE projects 
-    SET title = $1, description = $2, short_description = $3, image_url = $4, 
-        banner_image = $5, category_id = $6, category = $7, content = $8,
-        canvas_content = $9, slug = $10, author = $11, tags = $12,
-        status = $13, featured = $14, display_order = $15, views = $16,
-        updated_at = CURRENT_TIMESTAMP
-    WHERE id = $17
+    SET title = $1, slug = $2, description = $3, short_description = $4, image_url = $5, 
+        banner_image = $6, category_id = $7, status = $8, featured = $9, 
+        display_order = $10, canvas_data = $11, updated_at = CURRENT_TIMESTAMP
+    WHERE id = $12
     RETURNING *
-  `, [title, description, short_description, image_url, banner_image, 
-      category_id, category, content, canvas_content, slug, author, tags,
-      status, featured, display_order, views, id]);
+  `, [title, slug, description, short_description, image_url, banner_image, 
+      category_id, status, featured, display_order, canvas_data, id]);
   
   return result.rows[0];
 };
