@@ -267,7 +267,7 @@ export const getProjectBySlug = async (slug) => {
 export const createProject = async (data) => {
   const { 
     title, description, short_description, image_url, banner_image, 
-    category_id, category, author, status = 'active', is_featured = false, display_order = 0, canvas_content 
+    category_id, category, author, content, status = 'active', is_featured = false, display_order = 0, canvas_content 
   } = data;
   
   // Generate slug from title if not provided
@@ -285,11 +285,11 @@ export const createProject = async (data) => {
   
   const result = await query(`
     INSERT INTO projects (title, slug, description, short_description, image_url, banner_image, 
-                         category_id, category, author, status, is_featured, display_order, canvas_content)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                         category_id, category, author, content, status, is_featured, display_order, canvas_content)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
     RETURNING *
   `, [title, finalSlug, description, short_description, image_url, banner_image, 
-      category_id, category, author, status, is_featured, display_order, canvas_content]);
+      category_id, category, author, content, status, is_featured, display_order, canvas_content]);
   
   return result.rows[0];
 };
@@ -297,7 +297,7 @@ export const createProject = async (data) => {
 export const updateProject = async (id, data) => {
   const { 
     title, description, short_description, image_url, banner_image, 
-    category_id, category, author, status, is_featured, display_order, canvas_content 
+    category_id, category, author, content, status, is_featured, display_order, canvas_content 
   } = data;
   
   // Get existing project to preserve slug if not provided
@@ -334,14 +334,14 @@ export const updateProject = async (id, data) => {
   const result = await query(`
     UPDATE projects 
     SET title = $1, slug = $2, description = $3, short_description = $4, image_url = $5, 
-        banner_image = $6, category_id = $7, category = $8, author = $9, status = $10, 
-        is_featured = $11, display_order = $12, canvas_content = $13, updated_at = CURRENT_TIMESTAMP
-    WHERE id = $14
+        banner_image = $6, category_id = $7, category = $8, author = $9, content = $10, status = $11, 
+        is_featured = $12, display_order = $13, canvas_content = $14, updated_at = CURRENT_TIMESTAMP
+    WHERE id = $15
     RETURNING *
   `, [title || existing.title, slug, description || existing.description, 
       short_description || existing.short_description, image_url || existing.image_url, 
       banner_image || existing.banner_image, category_id || existing.category_id,
-      category || existing.category, author || existing.author,
+      category || existing.category, author || existing.author, content || existing.content,
       status || existing.status, is_featured !== undefined ? is_featured : existing.is_featured, 
       display_order !== undefined ? display_order : existing.display_order, 
       canvas_content !== undefined ? canvas_content : existing.canvas_content, id]);
