@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion'
 import { slidesAPI } from '../services/api'
+import { MagneticButton } from './ui/Modern2025'
+import { RippleButton } from './ui/Interactive3D'
+import { ArrowRight, Sparkles } from 'lucide-react'
 
 interface Slide {
   id: number
@@ -437,13 +440,38 @@ const ArtisticFrameSlider: React.FC = () => {
                   
                   {/* Slide Description */}
                   <motion.p
-                    className="text-sm sm:text-lg md:text-2xl text-white/95 font-light text-center max-w-lg drop-shadow-lg px-2"
+                    className="text-sm sm:text-lg md:text-2xl text-white/95 font-light text-center max-w-lg drop-shadow-lg px-2 mb-6"
                     initial={{ y: 30, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.6 }}
                   >
                     {slides[currentIndex]?.description}
                   </motion.p>
+
+                  {/* Modern CTA Button */}
+                  {slides[currentIndex]?.button_text && (
+                    <motion.div
+                      initial={{ y: 30, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.7, duration: 0.6 }}
+                    >
+                      <MagneticButton strength={0.2}>
+                        <RippleButton
+                          onClick={() => window.location.href = slides[currentIndex]?.button_link || '#contact'}
+                          className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-vandyke via-walnut to-dun text-white rounded-full font-bold shadow-2xl hover:shadow-3xl transition-all flex items-center gap-2 sm:gap-3 text-sm sm:text-base"
+                        >
+                          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" />
+                          {slides[currentIndex].button_text}
+                          <motion.div
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          >
+                            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                          </motion.div>
+                        </RippleButton>
+                      </MagneticButton>
+                    </motion.div>
+                  )}
 
                   {/* DH Trademark Watermark */}
                   <motion.div

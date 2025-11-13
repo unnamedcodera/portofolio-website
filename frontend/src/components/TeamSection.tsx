@@ -281,34 +281,17 @@ const TeamSection: React.FC = () => {
               onClick={() => setSelectedMember(member)}
             >
               <div className="relative">
-                {/* Decorative Border Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-vandyke/20 via-walnut/20 to-dun/20 rounded-3xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Subtle Glow Effect */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-vandyke/10 via-walnut/10 to-dun/10 rounded-3xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 
-                {/* Card Frame with Glass Effect */}
-                <div className="relative bg-gradient-to-br from-white via-white to-magnolia rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-vandyke/10">
+                {/* Minimalist Glass Card */}
+                <div className="relative bg-white/40 backdrop-blur-md rounded-3xl p-3 shadow-sm hover:shadow-xl transition-all duration-500 border border-white/60">
                   
-                  {/* Decorative Corner Elements */}
-                  <div className="absolute top-3 right-3 w-6 h-6 border-t-2 border-r-2 border-vandyke/20 rounded-tr-xl" />
-                  <div className="absolute bottom-3 left-3 w-6 h-6 border-b-2 border-l-2 border-vandyke/20 rounded-bl-xl" />
-                  
-                  {/* Avatar Circle with Enhanced Design */}
-                  <div className="relative mx-auto mb-5 w-36 h-36">
-                    {/* Rotating Border */}
-                    <motion.div
-                      className="absolute inset-0 rounded-full bg-gradient-to-r from-vandyke via-walnut to-dun opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                      animate={{
-                        rotate: [0, 360]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
-                    />
-                    
+                  {/* Avatar Circle - Clean Design */}
+                  <div className="relative mx-auto mb-3 w-24 h-24">
                     <motion.div 
-                      className="absolute inset-1 rounded-full bg-gradient-to-br from-vandyke/20 via-walnut/20 to-dun/20 flex items-center justify-center shadow-xl overflow-hidden border-4 border-white"
-                      whileHover={{ scale: 1.05 }}
+                      className="relative w-full h-full rounded-full bg-gradient-to-br from-vandyke/10 via-walnut/10 to-dun/10 flex items-center justify-center shadow-md overflow-hidden border-2 border-white/80 group-hover:border-vandyke/30 transition-all duration-500"
+                      whileHover={{ scale: 1.08 }}
                       transition={{ duration: 0.3 }}
                     >
                       {member.image_url ? (
@@ -318,50 +301,32 @@ const TeamSection: React.FC = () => {
                           className="w-full h-full object-cover"
                         />
                       ) : (
-                        <span className="text-6xl">{member.icon || '👤'}</span>
+                        <span className="text-4xl">{member.icon || '👤'}</span>
                       )}
                     </motion.div>
                     
-                    {/* Animated Number Badge */}
-                    <motion.div 
-                      className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-vandyke to-walnut rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg border-2 border-white"
-                      whileHover={{ scale: 1.15, rotate: 360 }}
-                      transition={{ duration: 0.5 }}
-                    >
+                    {/* Minimalist Number Badge */}
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-vandyke to-walnut rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
                       {index + 1}
-                    </motion.div>
-                    
-                    {/* Pulse Effect */}
-                    <motion.div
-                      className="absolute inset-0 rounded-full border-2 border-vandyke/30"
-                      animate={{
-                        scale: [1, 1.1, 1],
-                        opacity: [0.5, 0, 0.5]
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
+                    </div>
                   </div>
                   
-                  {/* Name & Position with Better Styling */}
-                  <div className="text-center space-y-2">
-                    <h3 className="text-lg font-bold text-vandyke mb-1 group-hover:text-walnut transition-colors">
+                  {/* Name & Position - Compact */}
+                  <div className="text-center">
+                    <h3 className="text-base font-bold text-vandyke group-hover:text-walnut transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-sm text-walnut/70 font-medium tracking-wide">
+                    <p className="text-xs text-walnut/60 font-medium mt-0.5">
                       {member.position}
                     </p>
                     
-                    {/* Skills Preview */}
+                    {/* Minimal Skills - Only show on hover */}
                     {parseSkills(member.skills).length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 justify-center mt-3">
-                        {parseSkills(member.skills).slice(0, 3).map((skill, idx) => (
+                      <div className="flex flex-wrap gap-1 justify-center mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {parseSkills(member.skills).slice(0, 2).map((skill, idx) => (
                           <span 
                             key={idx}
-                            className="px-2 py-1 bg-vandyke/5 text-vandyke/70 text-xs rounded-full border border-vandyke/10"
+                            className="px-2 py-0.5 bg-vandyke/10 text-vandyke/70 text-[10px] rounded-full"
                           >
                             {skill.name}
                           </span>
@@ -370,20 +335,14 @@ const TeamSection: React.FC = () => {
                     )}
                   </div>
                   
-                  {/* Decorative Divider with Dots */}
-                  <div className="flex items-center justify-center gap-2 mt-4">
-                    <div className="w-2 h-2 rounded-full bg-vandyke/20" />
-                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-vandyke/20 to-transparent" />
-                    <div className="w-2 h-2 rounded-full bg-vandyke/20" />
-                  </div>
+                  {/* Subtle Divider */}
+                  <div className="h-px bg-gradient-to-r from-transparent via-vandyke/10 to-transparent mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   
                   {/* View Profile Hint */}
                   <motion.div
-                    className="text-center mt-3 text-xs text-vandyke/40 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    initial={{ y: 5 }}
-                    whileHover={{ y: 0 }}
+                    className="text-center mt-2 text-[10px] text-vandyke/40 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   >
-                    Click to view profile →
+                    View Profile
                   </motion.div>
                 </div>
               </div>
@@ -423,14 +382,14 @@ const TeamSection: React.FC = () => {
             onClick={() => setSelectedMember(null)}
           >
             <motion.div
-              className="relative bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden"
+              className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto mx-4"
               initial={{ scale: 0.8, y: 50 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.8, y: 50 }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Gradient Header */}
-              <div className="relative h-32 bg-gradient-to-r from-vandyke via-walnut to-dun overflow-hidden">
+              <div className="relative h-24 sm:h-32 bg-gradient-to-r from-vandyke via-walnut to-dun overflow-hidden">
                 <div className="absolute inset-0 opacity-20" style={{
                   backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
                   backgroundSize: '20px 20px'
@@ -439,20 +398,20 @@ const TeamSection: React.FC = () => {
                 {/* Close Button */}
                 <button
                   onClick={() => setSelectedMember(null)}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all backdrop-blur-sm"
+                  className="absolute top-2 right-2 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white transition-all backdrop-blur-sm"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
               {/* Profile Content */}
-              <div className="relative px-8 pb-8">
+              <div className="relative px-4 sm:px-6 md:px-8 pb-6 sm:pb-8">
                 {/* Avatar - Overlapping header */}
-                <div className="flex justify-center -mt-16 mb-4">
+                <div className="flex justify-center -mt-12 sm:-mt-16 mb-3 sm:mb-4">
                   <motion.div 
-                    className="w-32 h-32 rounded-full bg-gradient-to-br from-vandyke/10 via-walnut/10 to-dun/10 flex items-center justify-center border-4 border-white shadow-xl overflow-hidden"
+                    className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-vandyke/10 via-walnut/10 to-dun/10 flex items-center justify-center border-3 sm:border-4 border-white shadow-xl overflow-hidden"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring" }}
@@ -464,23 +423,23 @@ const TeamSection: React.FC = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span className="text-6xl">{selectedMember.icon || '👤'}</span>
+                      <span className="text-4xl sm:text-6xl">{selectedMember.icon || '👤'}</span>
                     )}
                   </motion.div>
                 </div>
 
                 {/* Name & Position */}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-vandyke mb-2">
+                <div className="text-center mb-4 sm:mb-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-vandyke mb-2">
                     {selectedMember.name}
                   </h3>
-                  <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-vandyke/10 to-walnut/10 rounded-full text-sm font-semibold text-walnut uppercase tracking-wide border border-vandyke/20">
+                  <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-gradient-to-r from-vandyke/10 to-walnut/10 rounded-full text-xs sm:text-sm font-semibold text-walnut uppercase tracking-wide border border-vandyke/20">
                     {selectedMember.position}
                   </span>
                 </div>
 
                 {/* About Section */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <h4 className="text-sm font-bold text-vandyke uppercase tracking-wider mb-2 flex items-center gap-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -493,7 +452,7 @@ const TeamSection: React.FC = () => {
                 </div>
 
                 {/* Skills Section */}
-                <div className="mb-6">
+                <div className="mb-4 sm:mb-6">
                   <h4 className="text-sm font-bold text-vandyke uppercase tracking-wider mb-3 flex items-center gap-2">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -545,7 +504,7 @@ const TeamSection: React.FC = () => {
                       </svg>
                       Connect With Me
                     </h4>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                       {parseSocialMedia(selectedMember.social_media).map((social, index) => (
                         <motion.a
                           key={index}

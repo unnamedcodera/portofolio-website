@@ -1,9 +1,27 @@
 import { motion } from 'framer-motion'
 import ArtisticFrameSlider from './ArtisticFrameSlider'
+import { 
+  GlassmorphicCard, 
+  ParticleBackground, 
+  MagneticButton,
+  GradientOrb
+} from './ui/Modern2025'
+import { 
+  RippleButton,
+  NoiseTexture,
+  SplitText
+} from './ui/Interactive3D'
+import { Sparkles, ArrowRight, Zap } from 'lucide-react'
 
 const BannerSection: React.FC = () => {
   return (
     <section className="relative h-screen flex items-center justify-center px-6 overflow-hidden">
+      {/* Modern Background Effects */}
+      <NoiseTexture opacity={0.03} />
+      <ParticleBackground count={50} />
+      <GradientOrb size={600} color1="rgba(102, 66, 40, 0.2)" color2="rgba(93, 64, 55, 0.15)" className="-top-48 -left-48" />
+      <GradientOrb size={500} color1="rgba(212, 197, 176, 0.2)" color2="rgba(141, 145, 141, 0.15)" className="-bottom-48 -right-48" />
+      
       {/* Background gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-vandyke/5 via-transparent to-walnut/5"></div>
       

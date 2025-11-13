@@ -11,9 +11,9 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Darahitam Creative Lab - Professional Creative Agency',
-  description = 'Transform your ideas into reality with Darahitam Creative Lab. We specialize in branding, web development, graphic design, and creative solutions for businesses.',
-  keywords = 'creative agency, branding, web development, graphic design, digital marketing, UI/UX design, logo design, creative solutions, darahitam, creative lab',
+  title = 'Darahitam Creative Lab | Professional Creative Agency & Design Studio',
+  description = 'Darahitam Creative Lab transforms ideas into reality through innovative design, branding, web development, and creative solutions. Expert team specializing in visual identity, UI/UX design, digital marketing, and custom creative services for businesses worldwide.',
+  keywords = 'creative agency, creative lab, darahitam, design studio, branding agency, web development, graphic design, digital marketing, UI/UX design, visual identity, logo design, brand strategy, creative solutions, professional design services, creative team, portfolio website, modern design, 2025 design trends',
   image = 'https://darahitam.com/img/DH.png',
   url = 'https://darahitam.com',
   type = 'website',
@@ -60,6 +60,11 @@ const SEO: React.FC<SEOProps> = ({
           "url": "https://darahitam.com",
           "logo": "https://darahitam.com/img/DH.png",
           "description": description,
+          "slogan": "Transforming Ideas Into Reality",
+          "foundingDate": "2020",
+          "knowsAbout": ["Branding", "Web Development", "Graphic Design", "UI/UX Design", "Digital Marketing", "Creative Strategy"],
+          "areaServed": "Worldwide",
+          "serviceType": "Creative Agency Services",
           "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "Customer Service",
@@ -71,7 +76,7 @@ const SEO: React.FC<SEOProps> = ({
         })}
       </script>
       
-      {/* Local Business Schema */}
+      {/* Professional Service Schema */}
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -81,6 +86,18 @@ const SEO: React.FC<SEOProps> = ({
           "url": "https://darahitam.com",
           "description": description,
           "priceRange": "$$",
+          "serviceOutput": "Creative Solutions",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Creative Services",
+            "itemListElement": [
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Branding & Identity Design"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Web Development"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Graphic Design"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "UI/UX Design"}},
+              {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Digital Marketing"}}
+            ]
+          },
           "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "5",

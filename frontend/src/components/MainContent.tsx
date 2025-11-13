@@ -34,7 +34,12 @@ const MainContent = () => {
 
   return (
     <div className="min-h-screen">
-      <SEO />
+      <SEO 
+        title="Darahitam Creative Lab | Home - Creative Agency & Design Studio"
+        description="Welcome to Darahitam Creative Lab - Your partner in transforming ideas into reality. Explore our creative services including branding, web development, UI/UX design, and innovative solutions. Meet our expert team and discover our latest projects."
+        keywords="darahitam creative lab, home, creative agency, design studio, branding services, web development, creative team, portfolio, projects showcase, contact creative agency, professional design services"
+        url="https://darahitam.com"
+      />
       
       {/* Navigation */}
       <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />

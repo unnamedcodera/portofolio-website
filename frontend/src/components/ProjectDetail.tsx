@@ -96,7 +96,7 @@ const ProjectDetail = () => {
       {/* Banner Image */}
       {project.banner_image && (
         <motion.div
-          className="relative h-[60vh] overflow-hidden"
+          className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
@@ -110,33 +110,33 @@ const ProjectDetail = () => {
           
           {/* Title Overlay */}
           <motion.div
-            className="absolute bottom-0 left-0 right-0 p-8 md:p-16"
+            className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 lg:p-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <div className="max-w-6xl mx-auto">
-              <div className="inline-block px-4 py-2 bg-dun/90 backdrop-blur-sm rounded-full mb-4">
-                <span className="text-vandyke font-semibold text-sm">{project.category}</span>
+              <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 bg-dun/90 backdrop-blur-sm rounded-full mb-3 sm:mb-4">
+                <span className="text-vandyke font-semibold text-xs sm:text-sm">{project.category}</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-3 sm:mb-4 drop-shadow-lg">
                 {project.title}
               </h1>
               
               {/* Short Description in Header */}
-              <p className="text-lg md:text-xl text-white/95 mb-4 max-w-3xl leading-relaxed drop-shadow-md">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-white/95 mb-3 sm:mb-4 max-w-3xl leading-relaxed drop-shadow-md">
                 {project.description}
               </p>
               
-              <div className="flex items-center gap-4 text-white/90">
-                <span className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/90">
+                <span className="flex items-center gap-1 sm:gap-2">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                   By {project.author}
                 </span>
-                <span className="flex items-center gap-2">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <span className="flex items-center gap-1 sm:gap-2">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                     <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
                   </svg>
@@ -150,7 +150,7 @@ const ProjectDetail = () => {
 
       {/* Rich Content - Only show if no canvas content */}
       {!project.canvas_content && project.content && (
-      <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 md:py-16">
         <motion.div
           className="prose prose-lg max-w-none"
           initial={{ opacity: 0, y: 20 }}
@@ -192,17 +192,17 @@ const ProjectDetail = () => {
         </div>
       )}
 
-      <div className="max-w-4xl mx-auto px-6 pb-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-8 sm:pb-12">
         {/* Back Button */}
         <motion.div
-          className="mt-16 text-center"
+          className="mt-8 sm:mt-12 md:mt-16 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}
         >
           <button
             onClick={() => navigate('/projects')}
-            className="px-8 py-4 bg-vandyke text-white rounded-full hover:bg-walnut transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            className="px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base bg-vandyke text-white rounded-full hover:bg-walnut transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1"
           >
             ← Back to Projects
           </button>

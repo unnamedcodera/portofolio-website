@@ -241,7 +241,7 @@ const CanvasViewer: React.FC<CanvasViewerProps> = ({ content }) => {
 
   return (
     <motion.div
-      className="canvas-viewer-fullpage"
+      className="canvas-viewer-fullpage px-4 sm:px-6 py-6 sm:py-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -249,20 +249,28 @@ const CanvasViewer: React.FC<CanvasViewerProps> = ({ content }) => {
         backgroundColor: background === '#ffffff' ? 'transparent' : background,
         width: '100%',
         margin: 0,
-        padding: 0,
-        overflow: 'hidden', // Hide anything outside canvas bounds
+        overflow: 'hidden',
       }}
     >
       <div
-        className="relative"
+        className="relative mx-auto"
         style={{
+          maxWidth: '100%',
           width: `${canvasWidth}px`,
-          height: `${canvasHeight}px`,
-          margin: '0 auto',
-          overflow: 'hidden', // Clip content to canvas size
+          height: 'auto',
+          aspectRatio: `${canvasWidth} / ${canvasHeight}`,
+          overflow: 'hidden',
         }}
       >
-        {parsedContent.objects.map((obj: CanvasObject, index: number) => renderObject(obj, index))}
+        <div
+          className="relative w-full h-full"
+          style={{
+            transform: 'scale(1)',
+            transformOrigin: 'top center',
+          }}
+        >
+          {parsedContent.objects.map((obj: CanvasObject, index: number) => renderObject(obj, index))}
+        </div>
       </div>
     </motion.div>
   )
