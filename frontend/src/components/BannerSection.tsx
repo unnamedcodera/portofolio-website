@@ -2,10 +2,9 @@ import { motion } from 'framer-motion'
 import ArtisticFrameSlider from './ArtisticFrameSlider'
 import {
   ParticleBackground,
-  GradientOrb,
-  NoiseTexture
+  GradientOrb
 } from './ui/Modern2025'
-import { Sparkles, ArrowRight, Zap } from 'lucide-react'
+import { NoiseTexture } from './ui/Interactive3D'
 
 const BannerSection: React.FC = () => {
   return (
